@@ -1,0 +1,21 @@
+:root[data-theme="HEX_LIGHT"] {
+    --background-1: #f8e0c7;
+    --background-2: #f7cfaa;
+    --background-3: #ecb585;
+    --background-4: #c29468;
+    --black: #2a1d14;
+
+    --foreground-1: #24170f;
+    --foreground-2: #3f2a1d;
+    --foreground-3: #5d4230;
+    --foreground-4: #795944;
+    --white: #f7ebe3;
+
+    --red: #dc2626;
+    --orange: #ef842a;
+    --yellow: #d69b1d;
+    --green: #2f9e5f;
+    --blue: #2563eb;
+    --purple: #7c3aed;
+    --pink: #db2777;
+}

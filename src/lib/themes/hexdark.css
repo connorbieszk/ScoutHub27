@@ -1,0 +1,21 @@
+:root[data-theme="HEX_DARK"] {
+    --background-1: #29221d;
+    --background-2: #38271c;
+    --background-3: #4a3020;
+    --background-4: #5a3820;
+    --black: #0f0b08;
+
+    --foreground-1: #fff7f0;
+    --foreground-2: #e8d8ca;
+    --foreground-3: #c4aa96;
+    --foreground-4: #9c8068;
+    --white: #ffffff;
+
+    --red: #ef4444;
+    --orange: #ef842a;
+    --yellow: #eab308;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+}

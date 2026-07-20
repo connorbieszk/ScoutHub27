@@ -1,0 +1,86 @@
+@import "../themes/light.css";
+@import "../themes/dark.css";
+@import "../themes/hexdark.css";
+@import "../themes/hexlight.css";
+
+@font-face {
+    font-family: "LeagueSpartan";
+    src: url("../fonts/LeagueSpartan-ExtraLight.woff2");
+    font-weight: 200;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: "LeagueSpartan";
+    src: url("../fonts/LeagueSpartan-Light.woff2");
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "LeagueSpartan";
+    src: url("../fonts/LeagueSpartan-Regular.woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "LeagueSpartan";
+    src: url("../fonts/LeagueSpartan-Medium.woff2");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "LeagueSpartan";
+    src: url("../fonts/LeagueSpartan-SemiBold.woff2");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "LeagueSpartan";
+    src: url("../fonts/LeagueSpartan-Bold.woff2");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "LeagueSpartan";
+    src: url("../fonts/LeagueSpartan-ExtraBold.woff2");
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "LeagueSpartan";
+    src: url("../fonts/LeagueSpartan-Black.woff2");
+    font-weight: 900;
+    font-style: normal;
+}
+:root {
+    --default-border-radius: .5rem;
+    --font-family: "LeagueSpartan", sans-serif;
+
+    --font-extralight: 200;
+    --font-light: 300;
+    --font-normal: 400;
+    --font-medium: 500;
+    --font-semibold: 600;
+    --font-bold: 700;
+    --font-extrabold: 800;
+    --font-black: 900;
+}
+
+body {
+    background-color: var(--background-1);
+    color: var(--foreground-1)
+}
+
+* {
+    transition:
+        background-color 200ms ease,
+        color 200ms ease,
+        border-color 200ms ease;
+}

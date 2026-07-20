@@ -1,0 +1,21 @@
+:root[data-theme="DARK"] {
+    --background-1: #121212;
+    --background-2: #1e1e1e;
+    --background-3: #2b2b2b;
+    --background-4: #3d3d3d;
+    --black: #0d0d0d;
+
+    --foreground-1: #f5f5f5;
+    --foreground-2: #d6d6d6;
+    --foreground-3: #b3b3b3;
+    --foreground-4: #8f8f8f;
+    --white: #dedede;
+
+    --red: #ef4444;
+    --orange: #f97316;
+    --yellow: #eab308;
+    --green: #22c55e;
+    --blue: #3b82f6;
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+}
