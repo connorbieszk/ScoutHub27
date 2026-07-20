@@ -5,7 +5,7 @@
 <div class="content">
 	<div class="title">
 		<h1>HexScout BIOCORE</h1>
-		<h2>Welcome to the 2027 scouting app. Choose where you would like to go.</h2>
+		<h2>Welcome to the 2027 scouting app. <br>Choose where you would like to go.</h2>
 	</div>
 
 	<div class="actions">
@@ -77,7 +77,6 @@
 
 			padding: 0.5rem;
 
-			z-index: 100;
             width: 100%;
 			box-sizing: border-box;
 		}

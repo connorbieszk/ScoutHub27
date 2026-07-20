@@ -53,7 +53,5 @@
 	div.title {
 		padding: var(--default-padding);
 	}
-	div.options {
-		padding: var(--default-padding);
-	}
+
 </style>
