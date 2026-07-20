@@ -1,19 +1,19 @@
 :root[data-theme="HEX_LIGHT"] {
-    --background-1: #f8e0c7;
-    --background-2: #f7cfaa;
-    --background-3: #ecb585;
-    --background-4: #c29468;
-    --black: #2a1d14;
+    --background-1: #ffe8ca;
+    --background-2: #ffcea0;
+    --background-3: #f8a154;
+    --background-4: #c5763d;
+    --black: #2b1e14;
 
-    --foreground-1: #24170f;
-    --foreground-2: #3f2a1d;
-    --foreground-3: #5d4230;
-    --foreground-4: #795944;
-    --white: #f7ebe3;
+    --foreground-1: #23160d;
+    --foreground-2: #432b16;
+    --foreground-3: #67452f;
+    --foreground-4: #8b6d53;
+    --white: #f8efe7;
 
-    --red: #dc2626;
+    --red: #c0352c;
     --orange: #ef842a;
-    --yellow: #d69b1d;
+    --yellow: #d6981f;
     --green: #2f9e5f;
     --blue: #2563eb;
     --purple: #7c3aed;

@@ -17,7 +17,7 @@
 </script>
 
 <nav class="navbar">
-	<Button href="/" onclick={closeMenu}>HexScouter BioCore</Button>
+	<Button href="/" onclick={closeMenu} size='md'>HexScouter BioCore</Button>
 
 	<button
 		class="menu-button"
@@ -29,7 +29,7 @@
 
 	<div class="navbar-links desktop">
 		{#each links as link (link.href)}
-			<Button href={link.href}>
+			<Button href={link.href} size='md'>
 				{link.label}
 			</Button>
 		{/each}
@@ -38,7 +38,7 @@
 	{#if menuOpen}
 		<div class="navbar-links mobile" in:slide={{ duration: 200 }} out:slide={{ duration: 150 }}>
 			{#each links as link (link.href)}
-				<Button href={link.href} onclick={closeMenu}>
+				<Button href={link.href} onclick={closeMenu} size='md'>
 					{link.label}
 				</Button>
 			{/each}

@@ -4,11 +4,42 @@
 
 	let {
 		children,
-		state = $bindable(0)
+		state = $bindable(0),
+		size = 'md'
 	}: {
 		children: Snippet;
 		state: number;
+		size?: 'sm' | 'md' | 'lg';
 	} = $props();
+
+	const sizeStyles = {
+		sm: {
+			fontSize: '0.95rem',
+			gap: '0.5rem',
+			groupGap: '0.3rem',
+			displayMinWidth: '2.75rem',
+			displayHeight: '2.4rem',
+			displayFontSize: '1.2rem'
+		},
+		md: {
+			fontSize: '1.1rem',
+			gap: '0.75rem',
+			groupGap: '0.4rem',
+			displayMinWidth: '3.25rem',
+			displayHeight: '2.85rem',
+			displayFontSize: '1.5rem'
+		},
+		lg: {
+			fontSize: '1.25rem',
+			gap: '1rem',
+			groupGap: '0.5rem',
+			displayMinWidth: '3.75rem',
+			displayHeight: '3.2rem',
+			displayFontSize: '1.75rem'
+		}
+	} as const;
+
+	const currentSize = sizeStyles[size];
 
 	function addNumber(integer: number) {
 		state += integer;
@@ -27,21 +58,24 @@
 	const subTen = () => subNumber(10);
 </script>
 
-<div class="numberInputContainer">
+<div
+	class="numberInputContainer"
+	style={`--number-font-size: ${currentSize.fontSize}; --number-gap: ${currentSize.gap}; --number-group-gap: ${currentSize.groupGap}; --number-display-min-width: ${currentSize.displayMinWidth}; --number-display-height: ${currentSize.displayHeight}; --number-display-font-size: ${currentSize.displayFontSize};`}
+>
 	<div class="controls">
 		{@render children()}
 		<div class="group">
-			<Button onclick={subTen} layer={4}>-10</Button>
-			<Button onclick={subFive} layer={4}>-5</Button>
-			<Button onclick={subOne} layer={4}>-1</Button>
+			<Button onclick={subTen} size={size}>-10</Button>
+			<Button onclick={subFive} size={size}>-5</Button>
+			<Button onclick={subOne} size={size}>-1</Button>
 		</div>
 
 		<span>{state}</span>
 
 		<div class="group">
-			<Button onclick={addOne} layer={4}>+1</Button>
-			<Button onclick={addFive} layer={4}>+5</Button>
-			<Button onclick={addTen} layer={4}>+10</Button>
+			<Button onclick={addOne} size={size}>+1</Button>
+			<Button onclick={addFive} size={size}>+5</Button>
+			<Button onclick={addTen} size={size}>+10</Button>
 		</div>
 	</div>
 </div>
@@ -52,12 +86,12 @@
 		flex-direction: column;
 		align-items: center;
 
-		gap: 0.75rem;
+		gap: var(--number-gap);
 
 		font-family: var(--font-family);
-		font-size: 1.5rem;
+		font-size: var(--number-font-size);
 
-		padding: var(--default-padding);
+		padding: 0.8rem 0.9rem;
 		margin: var(--default-margin);
 
 		width: fit-content;
@@ -65,8 +99,8 @@
 		box-sizing: border-box;
 
 		color: var(--foreground-2);
-		background-color: var(--background-3);
-
+		background-color: var(--background-2);
+		border: 1px solid var(--background-4);
 		border-radius: var(--default-border-radius);
 	}
 
@@ -74,13 +108,19 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		gap: 0.75rem;
+		gap: var(--number-gap);
 	}
 
 	.group {
 		display: flex;
 		width: fit-content;
-		gap: 0.4rem;
+		gap: var(--number-group-gap);
+	}
+
+	.group :global(button) {
+		border: 1px solid var(--background-4);
+		border-radius: var(--default-border-radius);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 	}
 
 	span {
@@ -88,15 +128,16 @@
 		align-items: center;
 		justify-content: center;
 
-		min-width: 3.5rem;
-		height: 3rem;
+		min-width: var(--number-display-min-width);
+		height: var(--number-display-height);
 
 		padding: 0 0.75rem;
 
-		background-color: var(--background-2);
+		background-color: var(--background-3);
+		border: 1px solid var(--background-4);
 		border-radius: var(--default-border-radius);
 
-		font-size: 2rem;
+		font-size: var(--number-display-font-size);
 		font-weight: bold;
 	}
 
@@ -105,13 +146,13 @@
 			width: 100%;
 			max-width: calc(100% - (2 * var(--default-margin)));
 			margin: var(--default-margin);
-			padding: var(--default-padding);
+			padding: 0.9rem 1rem;
 		}
 
 		.controls {
 			width: 100%;
 			flex-direction: column;
-			gap: 0.5rem;
+			gap: 0.65rem;
 		}
 		span {
 			width: 100%;
@@ -123,11 +164,13 @@
 			width: 100%;
 			display: flex;
 			justify-content: center;
-			gap: 0.4rem;
+			gap: var(--number-group-gap);
 		}
 
 		.group :global(button) {
 			flex: 1;
+			min-height: 3rem;
+			padding: 0.85rem 0.95rem;
 		}
 	}
 </style>

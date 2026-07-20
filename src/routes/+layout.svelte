@@ -19,6 +19,8 @@
 
 <NavigationBar />
 
-{@render children()}
+<main>
+	{@render children()}
+</main>
 
 <Footer />

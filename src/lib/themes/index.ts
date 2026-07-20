@@ -16,6 +16,13 @@ export function setTheme(theme: Themes) {
     localStorage.setItem("Theme", theme);
 }
 
+function getSystemTheme(): Themes {
+    if (!browser) return Themes.HEX_DARK;
+
+    const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)")?.matches;
+    return prefersDark ? Themes.HEX_DARK : Themes.HEX_LIGHT;
+}
+
 export function getTheme(): Themes {
     if (!browser) return Themes.HEX_DARK;
 
@@ -23,5 +30,5 @@ export function getTheme(): Themes {
 
     return Object.values(Themes).includes(theme as Themes)
         ? (theme as Themes)
-        : Themes.HEX_DARK;
+        : getSystemTheme();
 }

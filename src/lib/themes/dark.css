@@ -1,19 +1,19 @@
 :root[data-theme="DARK"] {
-    --background-1: #121212;
-    --background-2: #1e1e1e;
-    --background-3: #2b2b2b;
-    --background-4: #3d3d3d;
-    --black: #0d0d0d;
+    --background-1: #101010;
+    --background-2: #1f1f1f;
+    --background-3: #2c2c2c;
+    --background-4: #404040;
+    --black: #0c0c0c;
 
-    --foreground-1: #f5f5f5;
-    --foreground-2: #d6d6d6;
-    --foreground-3: #b3b3b3;
-    --foreground-4: #8f8f8f;
-    --white: #dedede;
+    --foreground-1: #f4f4f4;
+    --foreground-2: #cfcfcf;
+    --foreground-3: #ababab;
+    --foreground-4: #8d8d8d;
+    --white: #e1e1e1;
 
     --red: #ef4444;
     --orange: #f97316;
-    --yellow: #eab308;
+    --yellow: #e3b50a;
     --green: #22c55e;
     --blue: #3b82f6;
     --purple: #8b5cf6;

@@ -1,21 +1,21 @@
 :root[data-theme="HEX_DARK"] {
-    --background-1: #29221d;
-    --background-2: #38271c;
-    --background-3: #4a3020;
-    --background-4: #5a3820;
-    --black: #0f0b08;
+    --background-1: #241b17;
+    --background-2: #33281f;
+    --background-3: #423629;
+    --background-4: #564936;
+    --black: #0e0a08;
 
-    --foreground-1: #fff7f0;
-    --foreground-2: #e8d8ca;
-    --foreground-3: #c4aa96;
-    --foreground-4: #9c8068;
+    --foreground-1: #f4ede8;
+    --foreground-2: #ddc9bb;
+    --foreground-3: #b9a08a;
+    --foreground-4: #927a64;
     --white: #ffffff;
 
     --red: #ef4444;
     --orange: #ef842a;
-    --yellow: #eab308;
+    --yellow: #d7a909;
     --green: #22c55e;
-    --blue: #3b82f6;
-    --purple: #8b5cf6;
+    --blue: #4f86ff;
+    --purple: #a071f1;
     --pink: #ec4899;
 }

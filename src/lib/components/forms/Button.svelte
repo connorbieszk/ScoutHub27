@@ -6,45 +6,45 @@
 		href = undefined,
 		onclick = undefined,
 		children,
-		layer = 3,
 		variant = 'default',
-		type = 'button'
+		type = 'button',
+		size = 'lg'
 	}: {
 		href?: Parameters<typeof resolve>[0];
 		onclick?: () => void;
 		children: Snippet;
-		layer?: 1 | 2 | 3 | 4;
 		variant?: 'default' | 'primary' | 'danger';
 		type?: 'button' | 'submit' | 'reset';
+		size?: 'sm' | 'md' | 'lg';
 	} = $props();
 
-	const layers = {
-		1: {
-			background: 'var(--background-1)',
-			hover: 'var(--background-2)'
+
+	const sizeStyles = {
+		sm: {
+			fontSize: '0.95rem',
+			padding: '0.4rem 0.7rem',
+			minHeight: '1.8rem'
 		},
-		2: {
-			background: 'var(--background-2)',
-			hover: 'var(--background-3)'
+		md: {
+			fontSize: '1.1rem',
+			padding: '0.55rem 0.85rem',
+			minHeight: '2.25rem'
 		},
-		3: {
-			background: 'var(--background-3)',
-			hover: 'var(--background-4)'
-		},
-		4: {
-			background: 'var(--background-4)',
-			hover: 'var(--background-3)'
+		lg: {
+			fontSize: '1.3rem',
+			padding: '0.7rem 1rem',
+			minHeight: '2.75rem'
 		}
 	} as const;
 
 	// svelte-ignore state_referenced_locally
-	var currentLayer = layers[layer];
+	const currentSize = sizeStyles[size];
 </script>
 
 {#if href}
 	<a
 		class={variant}
-		style={`--button-bg: ${currentLayer.background}; --button-hover: ${currentLayer.hover}`}
+		style={`--button-font-size: ${currentSize.fontSize}; --button-padding: ${currentSize.padding}; --button-min-height: ${currentSize.minHeight}`}
 		href={resolve(href)}
 		{onclick}
 	>
@@ -53,7 +53,7 @@
 {:else}
 	<button
 		class={variant}
-		style={`--button-bg: ${currentLayer.background}; --button-hover: ${currentLayer.hover}`}
+		style={`--button-font-size: ${currentSize.fontSize}; --button-padding: ${currentSize.padding}; --button-min-height: ${currentSize.minHeight}`}
 		{type}
 		{onclick}
 	>
@@ -69,40 +69,55 @@
 		justify-content: center;
 
 		font-family: var(--font-family);
-		font-size: 1.5rem;
+		font-size: var(--button-font-size);
+		font-weight: 600;
 
-		padding: var(--default-padding);
+		padding: var(--button-padding);
+		min-height: var(--button-min-height);
 		margin: var(--default-margin);
 
 		text-decoration: none;
 
 		color: var(--foreground-2);
 
-		background-color: var(--button-bg);
-
-		border: none;
+		background-color: var(--background-2);
+		border: 1px solid var(--background-4);
 		border-radius: var(--default-border-radius);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 
 		cursor: pointer;
 
 		transition:
 			background-color 0.2s ease,
-			transform 0.15s ease;
+			transform 0.15s ease,
+			border-color 0.2s ease;
 	}
 
 	a:hover,
 	button:hover {
 		background-color: var(--button-hover);
 		transform: translateY(-2px);
+		border-color: var(--foreground-2);
+	}
+
+	@media (max-width: 700px) {
+		a,
+		button {
+			min-height: 3rem;
+			padding: 0.9rem 1.05rem;
+			font-size: calc(var(--button-font-size) + 0.08rem);
+		}
 	}
 
 	.primary {
 		background-color: var(--green);
 		color: white;
+		border-color: var(--green);
 	}
 
 	.danger {
 		background-color: var(--red);
 		color: white;
+		border-color: var(--red);
 	}
 </style>
