@@ -3,12 +3,14 @@
 		value = $bindable(0),
 		min = 0,
 		max = 100,
+		label,
 		step = 1,
 		size = 'md'
 	}: {
 		value?: number;
 		min?: number;
 		max?: number;
+		label: string;
 		step?: number;
 		size?: 'sm' | 'md' | 'lg';
 	} = $props();
@@ -30,6 +32,7 @@
 </script>
 
 <label class="sliderWrap">
+<span class="value">{label}</span>
 	<input
 		bind:value
 		type="range"

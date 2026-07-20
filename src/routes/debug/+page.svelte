@@ -70,7 +70,7 @@
 
 	<br>
 
-	<Slider bind:value={sliderValue} min={0} max={5} step={1} size="md" />
+	<Slider bind:value={sliderValue} min={0} max={5} step={1} size="md" label="Test Slider" />
 
 	<br>
 
