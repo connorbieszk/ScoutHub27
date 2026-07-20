@@ -1,15 +1,23 @@
 <script lang="ts">
-	import { resolve } from '$app/paths';
+	import { slide } from 'svelte/transition';
+	import Button from '$lib/components/Button.svelte';
 
 	let menuOpen = $state(false);
+
+	const links = [
+		{ href: '/scouting', label: 'Scouting' },
+		{ href: '/members', label: 'Members' },
+		{ href: '/data', label: 'Data' },
+		{ href: '/settings', label: 'Settings' }
+	] as const;
+
+	function closeMenu() {
+		menuOpen = false;
+	}
 </script>
 
-<div class="navbar">
-	<div class="navbar-title">
-		<h3>
-			<a href={resolve('/')}>HexScouter BioCore</a>
-		</h3>
-	</div>
+<nav class="navbar">
+	<Button href="/" onclick={closeMenu}>HexScouter BioCore</Button>
 
 	<button
 		class="menu-button"
@@ -19,54 +27,41 @@
 		☰
 	</button>
 
-	<div class="navbar-links" class:open={menuOpen}>
-		<a href={resolve('/scouting')}>Scouting</a>
-		<a href={resolve('/members')}>Members</a>
-		<a href={resolve('/data')}>Data</a>
-		<a href={resolve('/settings')}>Settings</a>
+	<div class="navbar-links desktop">
+		{#each links as link (link.href)}
+			<Button href={link.href}>
+				{link.label}
+			</Button>
+		{/each}
 	</div>
-</div>
+
+	{#if menuOpen}
+		<div class="navbar-links mobile" in:slide={{ duration: 200 }} out:slide={{ duration: 150 }}>
+			{#each links as link (link.href)}
+				<Button href={link.href} onclick={closeMenu}>
+					{link.label}
+				</Button>
+			{/each}
+		</div>
+	{/if}
+</nav>
 
 <style>
 	.navbar {
 		position: relative;
 
 		display: flex;
-		justify-content: space-between;
 		align-items: center;
-
-		background-color: var(--background-2);
-		border-radius: var(--default-border-radius);
+		justify-content: space-between;
 
 		width: 100%;
 		min-height: var(--default-height);
 
 		padding: 0.25rem;
 		box-sizing: border-box;
-	}
 
-	.navbar-title h3 {
-		margin: 0;
-	}
-
-	a {
-		font-family: var(--font-family);
-		font-size: 1.5rem;
-
-		text-align: center;
-		padding: 0.5rem;
-
-		text-decoration: none;
-		color: var(--foreground-2);
-
-		background-color: var(--background-3);
+		background-color: var(--background-2);
 		border-radius: var(--default-border-radius);
-
-		transition: background-color 0.2s;
-	}
-
-	a:hover {
-		background-color: var(--background-4);
 	}
 
 	.navbar-links {
@@ -75,58 +70,72 @@
 		gap: 0.5rem;
 	}
 
+	.mobile {
+		display: none;
+	}
+
 	.menu-button {
 		display: none;
-
-		background: var(--background-3);
-		color: var(--foreground-1);
-
-		border: none;
-		border-radius: var(--default-border-radius);
 
 		font-size: 2rem;
 		padding: 0.25rem 0.75rem;
 
+		color: var(--foreground-1);
+		background-color: var(--background-3);
+
+		border: none;
+		border-radius: var(--default-border-radius);
+
 		cursor: pointer;
+
+		transition:
+			background-color 0.2s ease,
+			transform 0.15s ease;
 	}
 
 	.menu-button:hover {
 		background-color: var(--background-4);
+		transform: scale(1.05);
 	}
 
-	/* Mobile */
 	@media (max-width: 700px) {
-		.navbar {
-			height: auto;
+		.navbar > :global(a),
+		.navbar > :global(button) {
+			max-width: 75%;
+		}
+	}
+
+	@media (max-width: 700px) {
+		.desktop {
+			display: none;
 		}
 
 		.menu-button {
 			display: block;
 		}
 
-		.navbar-links {
+		.mobile {
 			position: absolute;
 
 			top: calc(100% + 0.5rem);
 			left: 0;
 			right: 0;
 
-			display: none;
+			display: flex;
 			flex-direction: column;
+			align-items: stretch;
+			gap: 0.5rem;
+
+			padding: 0.5rem;
 
 			background-color: var(--background-2);
-
 			border-radius: var(--default-border-radius);
-			padding: 0.5rem;
 
 			z-index: 100;
 		}
 
-		.navbar-links.open {
-			display: flex;
-		}
-
-		.navbar-links a {
+		.mobile :global(a),
+		.mobile :global(button) {
 			width: 100%;
 			box-sizing: border-box;
 		}
