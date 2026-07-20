@@ -61,6 +61,8 @@
 }
 :root {
     --default-border-radius: .5rem;
+    --default-padding: .5rem;
+    --default-margin: .25rem;
     --font-family: "LeagueSpartan", sans-serif;
 
     --font-extralight: 200;
@@ -73,14 +75,67 @@
     --font-black: 900;
 }
 
-body {
-    background-color: var(--background-1);
-    color: var(--foreground-1)
-}
-
 * {
+    font-family: var(--font-family);
     transition:
         background-color 200ms ease,
         color 200ms ease,
         border-color 200ms ease;
+}
+
+html, body {
+	height: 100%;
+	margin: .25rem;
+	overflow: hidden;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	background-color: var(--background-1);
+	color: var(--foreground-1);
+}
+
+main {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	min-height: 0;
+	padding: 0.5rem;
+}
+
+div.content {
+	flex: 1;
+	min-height: var(--default-height);
+	width: 100%;
+
+	padding: 0.25rem;
+    margin-top: .5rem;
+	box-sizing: border-box;
+
+	background-color: var(--background-2);
+	border-radius: var(--default-border-radius);
+
+	overflow: auto;
+}
+
+div.footer {
+    display: flex   ;
+	flex-shrink: 0;
+
+	width: 100%;
+	min-height: var(--default-height);
+
+	margin-top: 0.5rem;
+    margin-bottom: 1rem;
+	padding: 0.25rem;
+
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+	box-sizing: border-box;
+
+	background-color: var(--background-2);
+	border-radius: var(--default-border-radius);
 }

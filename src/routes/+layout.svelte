@@ -3,7 +3,8 @@
 	import '$lib/styles/style.css';
 	import { onMount } from 'svelte';
 	import { getTheme, setTheme } from '$lib/themes';
-	import NavigationBar from '$lib/components/NavigationBar.svelte';
+	import NavigationBar from '$lib/components/ui/NavigationBar.svelte';
+	import Footer from '$lib/components/ui/Footer.svelte';
 
 	let { children } = $props();
 
@@ -19,3 +20,5 @@
 <NavigationBar />
 
 {@render children()}
+
+<Footer />
