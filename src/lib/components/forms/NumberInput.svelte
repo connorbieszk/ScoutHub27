@@ -65,17 +65,17 @@
 	<div class="controls">
 		{@render children()}
 		<div class="group">
-			<Button onclick={subTen} size={size}>-10</Button>
-			<Button onclick={subFive} size={size}>-5</Button>
-			<Button onclick={subOne} size={size}>-1</Button>
+			<Button onclick={subTen} {size}>-10</Button>
+			<Button onclick={subFive} {size}>-5</Button>
+			<Button onclick={subOne} {size}>-1</Button>
 		</div>
 
 		<span>{state}</span>
 
 		<div class="group">
-			<Button onclick={addOne} size={size}>+1</Button>
-			<Button onclick={addFive} size={size}>+5</Button>
-			<Button onclick={addTen} size={size}>+10</Button>
+			<Button onclick={addOne} {size}>+1</Button>
+			<Button onclick={addFive} {size}>+5</Button>
+			<Button onclick={addTen} {size}>+10</Button>
 		</div>
 	</div>
 </div>

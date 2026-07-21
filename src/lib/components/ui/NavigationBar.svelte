@@ -17,7 +17,7 @@
 </script>
 
 <nav class="navbar">
-	<Button href="/" onclick={closeMenu} size='md'>HexScouter BioCore</Button>
+	<Button href="/" onclick={closeMenu} size="md">HexScouter BioCore</Button>
 
 	<button
 		class="menu-button"
@@ -29,7 +29,7 @@
 
 	<div class="navbar-links desktop">
 		{#each links as link (link.href)}
-			<Button href={link.href} size='md'>
+			<Button href={link.href} size="md">
 				{link.label}
 			</Button>
 		{/each}
@@ -38,7 +38,7 @@
 	{#if menuOpen}
 		<div class="navbar-links mobile" in:slide={{ duration: 200 }} out:slide={{ duration: 150 }}>
 			{#each links as link (link.href)}
-				<Button href={link.href} onclick={closeMenu} size='md'>
+				<Button href={link.href} onclick={closeMenu} size="md">
 					{link.label}
 				</Button>
 			{/each}
@@ -46,97 +46,96 @@
 	{/if}
 </nav>
 
-	<style>
-		.navbar {
-			position: relative;
+<style>
+	.navbar {
+		position: relative;
 
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 
-			width: 100%;
-			min-height: var(--default-height);
+		width: 100%;
+		min-height: var(--default-height);
 
-			padding: 0.25rem;
-			box-sizing: border-box;
+		padding: 0.25rem;
+		box-sizing: border-box;
 
-			background-color: var(--background-2);
-			border-radius: var(--default-border-radius);
-		}
+		background-color: var(--background-2);
+		border-radius: var(--default-border-radius);
+	}
 
-		.navbar-links {
-			display: flex;
-			align-items: center;
-			gap: 0.5rem;
-		}
+	.navbar-links {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
 
-		.mobile {
+	.mobile {
+		display: none;
+	}
+
+	.menu-button {
+		display: none;
+
+		font-size: 2rem;
+		padding: 0.25rem 0.75rem;
+
+		color: var(--foreground-1);
+		background-color: var(--background-3);
+
+		border: none;
+		border-radius: var(--default-border-radius);
+
+		cursor: pointer;
+
+		transition:
+			background-color 0.2s ease,
+			transform 0.15s ease;
+	}
+
+	.menu-button:hover {
+		background-color: var(--background-4);
+		transform: scale(1.05);
+	}
+
+	@media (max-width: 700px) {
+		.desktop {
 			display: none;
 		}
 
 		.menu-button {
-			display: none;
+			display: block;
+		}
 
-			font-size: 2rem;
-			padding: 0.25rem 0.75rem;
+		.mobile {
+			position: absolute;
 
-			color: var(--foreground-1);
+			top: calc(100% + 0.5rem);
+			left: 0;
+			right: 0;
+
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+			gap: 0.5rem;
+
+			padding: 0.5rem;
+
 			background-color: var(--background-3);
-
-			border: none;
 			border-radius: var(--default-border-radius);
 
-			cursor: pointer;
-
-			transition:
-				background-color 0.2s ease,
-				transform 0.15s ease;
+			z-index: 100;
 		}
 
-		.menu-button:hover {
-			background-color: var(--background-4);
-			transform: scale(1.05);
+		.mobile :global(a),
+		.mobile :global(button) {
+			width: 100%;
+			box-sizing: border-box;
 		}
 
-
-		@media (max-width: 700px) {
-			.desktop {
-				display: none;
-			}
-
-			.menu-button {
-				display: block;
-			}
-
-			.mobile {
-				position: absolute;
-
-				top: calc(100% + 0.5rem);
-				left: 0;
-				right: 0;
-
-				display: flex;
-				flex-direction: column;
-				align-items: stretch;
-				gap: 0.5rem;
-
-				padding: 0.5rem;
-
-				background-color: var(--background-3);
-				border-radius: var(--default-border-radius);
-
-				z-index: 100;
-			}
-
-			.mobile :global(a),
-			.mobile :global(button) {
-				width: 100%;
-				box-sizing: border-box;
-			}
-
-			.navbar > :global(a),
-			.navbar > :global(button) {
-				max-width: 75%;
-			}
+		.navbar > :global(a),
+		.navbar > :global(button) {
+			max-width: 75%;
 		}
-	</style>
+	}
+</style>

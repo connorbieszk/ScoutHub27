@@ -28,11 +28,13 @@
 	} as const;
 
 	const currentSize = $derived(sizeStyles[size]);
-	const percent = $derived(Math.min(100, Math.max(0, ((value - min) / Math.max(1, max - min)) * 100)));
+	const percent = $derived(
+		Math.min(100, Math.max(0, ((value - min) / Math.max(1, max - min)) * 100))
+	);
 </script>
 
 <label class="sliderWrap">
-<span class="value">{label}</span>
+	<span class="value">{label}</span>
 	<input
 		bind:value
 		type="range"
@@ -58,7 +60,13 @@
 		width: 100%;
 		min-width: 8rem;
 		height: var(--slider-height);
-		background: linear-gradient(90deg, var(--orange) 0%, var(--orange) var(--slider-fill), var(--background-3) var(--slider-fill), var(--background-3) 100%);
+		background: linear-gradient(
+			90deg,
+			var(--orange) 0%,
+			var(--orange) var(--slider-fill),
+			var(--background-3) var(--slider-fill),
+			var(--background-3) 100%
+		);
 		background-size: 100% 100%;
 		border: 1px solid var(--background-4);
 		border-radius: 999px;

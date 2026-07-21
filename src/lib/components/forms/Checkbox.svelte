@@ -51,13 +51,7 @@
 >
 	{@render children()}
 
-	<button
-		type={type}
-		onclick={toggleState}
-		aria-pressed={state}
-		aria-label="Toggle checkbox"
-	>
-	</button>
+	<button {type} onclick={toggleState} aria-pressed={state} aria-label="Toggle checkbox"> </button>
 </div>
 
 <style>

@@ -18,7 +18,6 @@
 		size?: 'sm' | 'md' | 'lg';
 	} = $props();
 
-
 	const sizeStyles = {
 		sm: {
 			fontSize: '0.95rem',
@@ -38,7 +37,9 @@
 	} as const;
 
 	const currentSize = $derived(sizeStyles[size]);
-	const resolvedHref = $derived(href ? (resolve as unknown as (value: string) => string)(href) : undefined);
+	const resolvedHref = $derived(
+		href ? (resolve as unknown as (value: string) => string)(href) : undefined
+	);
 </script>
 
 {#if href}
