@@ -6,6 +6,8 @@
 	import NavigationBar from '$lib/components/ui/NavigationBar.svelte';
 	import Footer from '$lib/components/ui/Footer.svelte';
 
+	
+
 	let { children } = $props();
 
 	onMount(() => {
