@@ -7,7 +7,6 @@ export default defineConfig({
 		sveltekit(),
 
 		SvelteKitPWA({
-			base: '/ScoutHub27/',
 			scope: '/ScoutHub27/',
 			registerType: 'autoUpdate',
 
@@ -25,6 +24,10 @@ export default defineConfig({
 				globPatterns: [
 					'**/*.{js,css,html,png,svg,ico,woff2,json}'
 				],
+
+				modifyURLPrefix: {
+					'': '/ScoutHub27/'
+				},
 
 				navigateFallback: '/ScoutHub27/index.html',
 
