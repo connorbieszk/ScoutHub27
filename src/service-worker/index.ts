@@ -1,115 +1,103 @@
-// Disables access to DOM typings like `HTMLElement` which are not available
-// inside a service worker and instantiates the correct globals
-/// <reference no-default-lib="true"/>
-/// <reference lib="esnext" />
 /// <reference lib="webworker" />
-
-// Ensures that the `$service-worker` import has proper type definitions
 /// <reference types="@sveltejs/kit" />
 
-// Only necessary if you have an import from `$env/static/public`
-/// <reference types="../.svelte-kit/ambient.d.ts" />
+import { build, files, prerendered, version } from '$service-worker';
 
-import { build, files, version } from '$service-worker';
+const sw = self as unknown as ServiceWorkerGlobalScope;
 
-// This gives `self` the correct types
-const self = globalThis.self as unknown as ServiceWorkerGlobalScope;
+const CACHE = `sveltekit-cache-${version}`;
 
-// Create a unique cache name for this deployment
-const CACHE = `cache-${version}`;
-
+/**
+ * Everything that should exist offline immediately:
+ * - Vite/SvelteKit generated assets
+ * - static/ folder
+ * - prerendered routes
+ */
 const ASSETS = [
-	...build, // the app itself
-	...files  // everything in `static`
+	...build,
+	...files,
+	...prerendered
 ];
 
-self.addEventListener('install', (event) => {
+sw.addEventListener('install', (event) => {
 	event.waitUntil(
 		(async () => {
 			const cache = await caches.open(CACHE);
 
-			// Cache JS/CSS/images/etc.
-			await cache.addAll(ASSETS);
-
-			// Cache every SvelteKit route
-			const routesResponse = await fetch('/ScoutHub27/routes.json');
-			const routes: string[] = await routesResponse.json();
-
-			await Promise.all(
-				routes.map(async (route) => {
-					try {
-						const response = await fetch(route);
-
-						if (response.ok) {
-							await cache.put(route, response.clone());
-						}
-					} catch (err) {
-						console.warn(`Failed to cache ${route}`, err);
-					}
-				})
+			await cache.addAll(
+				ASSETS.map((asset) => new URL(asset, sw.location.origin).pathname)
 			);
 
-			await self.skipWaiting();
+			await sw.skipWaiting();
 		})()
 	);
 });
 
-self.addEventListener('activate', (event) => {
-	// Remove previous cached data from disk
-	async function deleteOldCaches() {
-		for (const key of await caches.keys()) {
-			if (key !== CACHE) await caches.delete(key);
-		}
-	}
 
-	event.waitUntil(deleteOldCaches());
+sw.addEventListener('activate', (event) => {
+	event.waitUntil(
+		(async () => {
+			const keys = await caches.keys();
+
+			await Promise.all(
+				keys
+					.filter((key) => key !== CACHE)
+					.map((key) => caches.delete(key))
+			);
+
+			await sw.clients.claim();
+		})()
+	);
 });
 
-self.addEventListener('fetch', (event) => {
-	// ignore POST requests etc
-	if (event.request.method !== 'GET') return;
 
-	async function respond() {
-		const url = new URL(event.request.url);
-		const cache = await caches.open(CACHE);
+sw.addEventListener('fetch', (event) => {
+	const request = event.request;
 
-		// `build`/`files` can always be served from the cache
-		if (ASSETS.includes(url.pathname)) {
-			const response = await cache.match(url.pathname);
+	// Only cache GET requests
+	if (request.method !== 'GET') return;
 
-			if (response) {
+	event.respondWith(
+		(async () => {
+			const cache = await caches.open(CACHE);
+
+			/**
+			 * Cache-first:
+			 * - Great for JS/CSS/images/static files
+			 * - Makes the app work offline
+			 */
+			const cached = await cache.match(request);
+
+			if (cached) {
+				return cached;
+			}
+
+			try {
+				const response = await fetch(request);
+
+				// Cache successful responses
+				if (
+					response.ok &&
+					response.status === 200 &&
+					response.type !== 'opaque'
+				) {
+					await cache.put(request, response.clone());
+				}
+
 				return response;
+			} catch {
+				/**
+				 * Offline fallback:
+				 * Try cached page assets
+				 */
+				const fallback = await cache.match('/');
+
+				if (fallback) {
+					return fallback;
+				}
+
+				throw new Error('Offline and resource not cached');
 			}
-		}
-
-		// for everything else, try the network first, but
-		// fall back to the cache if we're offline
-		try {
-			const response = await fetch(event.request);
-
-			// if we're offline, fetch can return a value that is not a Response
-			// instead of throwing - and we can't pass this non-Response to respondWith
-			if (!(response instanceof Response)) {
-				throw new Error('invalid response from fetch');
-			}
-
-			if (response.status === 200 && !response.headers.get('cache-control')?.includes('no-store')) {
-				cache.put(event.request, response.clone());
-			}
-
-			return response;
-		} catch (err) {
-			const response = await cache.match(event.request);
-
-			if (response) {
-				return response;
-			}
-
-			// if there's no cache, then just error out
-			// as there is nothing we can do to respond to this request
-			throw err;
-		}
-	}
-
-	event.respondWith(respond());
+		})()
+	);
 });
