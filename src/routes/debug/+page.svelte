@@ -20,6 +20,10 @@
 	];
 </script>
 
+<svelte:head>
+	<title>Debug Page 01001000 01101001</title>
+</svelte:head>
+
 <div class="content">
 	<Button
 		onclick={() => {

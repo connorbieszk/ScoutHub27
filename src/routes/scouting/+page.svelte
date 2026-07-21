@@ -16,6 +16,10 @@
 	</div>
 </div>
 
+<svelte:head>
+	<title>Scouting</title>
+</svelte:head>
+
 <style>
 	.content {
 		display: flex;

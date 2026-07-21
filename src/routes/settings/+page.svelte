@@ -3,6 +3,10 @@
 	import { Themes, setTheme } from '$lib/themes';
 </script>
 
+<svelte:head>
+	<title>Settings</title>
+</svelte:head>
+
 <div class="content">
 	<div class="title">
 		<h1>Settings</h1>

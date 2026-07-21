@@ -15,6 +15,10 @@
 	</div>
 </div>
 
+<svelte:head>
+	<title>Homepage</title>
+</svelte:head>
+
 <style>
 	.content {
 		display: flex;
