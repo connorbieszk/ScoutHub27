@@ -2,23 +2,20 @@ import adapter from '@sveltejs/adapter-static';
 
 export default {
 	compilerOptions: {
-		runes: ({ filename }) =>
-			filename.split(/[/\\]/).includes('node_modules')
-				? undefined
-				: true
+		runes: ({ filename }) => (filename.split(/[/\\]/).includes('node_modules') ? undefined : true)
 	},
 
 	kit: {
 		adapter: adapter({
-			fallback: '404.html'
+			fallback: '404.html',
+			strict: false
 		}),
 		prerender: {
 			handleHttpError: 'warn'
 		},
+
 		paths: {
-			base: process.env.NODE_ENV === 'production'
-				? '/ScoutHub27'
-				: ''
+			base: '/ScoutHub27'
 		}
 	}
 };
