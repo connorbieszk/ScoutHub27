@@ -6,13 +6,20 @@
 	import NavigationBar from '$lib/components/ui/NavigationBar.svelte';
 	import Footer from '$lib/components/ui/Footer.svelte';
 
-	
+	import { afterNavigate } from '$app/navigation';
+
+	afterNavigate(async () => {
+		if ('serviceWorker' in navigator) {
+			const registration = await navigator.serviceWorker.getRegistration();
+			await registration?.update();
+		}
+	});
 
 	let { children } = $props();
 
 	onMount(() => {
-        setTheme(getTheme());
-    });
+		setTheme(getTheme());
+	});
 </script>
 
 <svelte:head>
