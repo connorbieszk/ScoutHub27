@@ -10,18 +10,18 @@ export default defineConfig({
 			registerType: 'autoUpdate',
 
 			scope: '/ScoutHub27/',
-
+			 
 			manifest: {
 				name: 'HexScouter BioCore',
 				short_name: 'BioCore',
-				display: 'standalone',
 				start_url: '/ScoutHub27/',
+				display: 'standalone',
 				background_color: '#000000',
 				theme_color: '#000000'
 			},
 
 			workbox: {
-				navigateFallback: '/ScoutHub27/index.html'
+				navigateFallback: '/ScoutHub27/index.html',
 			}
 		})
 	]
