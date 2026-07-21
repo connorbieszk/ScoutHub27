@@ -1,1 +1,0 @@
-import{S as e,w as t}from"../chunks/CoTXy7VA.js";import"../chunks/xihTtKlq.js";var n=t(`<div class="content"></div>`);function r(t){e(t,n())}export{r as component};
