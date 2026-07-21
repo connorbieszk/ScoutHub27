@@ -87,22 +87,30 @@
 		width: 100%;
 		min-width: 12rem;
 		box-sizing: border-box;
-		min-height: var(--textinput-height);
+
+		min-height: 4.5rem;
+		height: auto;
+		max-height: var(--textinput-height);
 		padding: var(--textinput-padding);
 		font-size: var(--textinput-font-size);
 		font-family: var(--font-family);
 		font-weight: 500;
-		line-height: 1.45;
+		line-height: 1.35;
+
 		color: var(--foreground-2);
 		background-color: var(--background-2);
 		border: 1px solid var(--background-4);
 		border-radius: var(--default-border-radius);
+
 		outline: none;
+
+		appearance: none;
 	}
 
 	textarea {
 		resize: vertical;
 		white-space: pre-wrap;
+		display: block;
 	}
 
 	input:focus,
@@ -114,7 +122,7 @@
 	@media (max-width: 700px) {
 		input,
 		textarea {
-			min-height: 7rem;
+			min-height: 4rem;
 			padding: 0.8rem 0.95rem;
 			font-size: 1rem;
 		}
