@@ -107,9 +107,10 @@
 	@media (max-width: 700px) {
 		a,
 		button {
-			min-height: 3rem;
-			padding: 0.9rem 1.05rem;
-			font-size: calc(var(--button-font-size) + 0.08rem);
+			min-height: 2.5rem; /* 40px */
+			max-height: 2.5rem;
+			padding: 0.45rem 0.7rem;
+			font-size: 0.95rem;
 		}
 	}
 

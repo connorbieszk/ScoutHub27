@@ -101,11 +101,11 @@
 
 <div class="nav">
 	<div class="nav-side">
-		<Button onclick={() => goToPage(page - 1)} size="sm">Back</Button>
+		<Button onclick={() => goToPage(page - 1)} size="lg">Back</Button>
 	</div>
 
 	<div class="current-page" bind:this={menuElement}>
-		<Button onclick={toggleMenu} size="sm">
+		<Button onclick={toggleMenu} size="lg">
 			{pages[page]} ▾
 		</Button>
 
@@ -113,7 +113,7 @@
 			<div class="menu">
 				{#each pages as name, index (index)}
 					{#if index !== page}
-						<Button onclick={() => goToPage(index)} size="sm">
+						<Button onclick={() => goToPage(index)} size="lg">
 							{name}
 						</Button>
 					{/if}
@@ -123,7 +123,7 @@
 	</div>
 
 	<div class="nav-side">
-		<Button onclick={() => goToPage(page + 1)} size="sm">Next</Button>
+		<Button onclick={() => goToPage(page + 1)} size="lg">Next</Button>
 	</div>
 </div>
 
@@ -146,7 +146,8 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 0.5rem;
-		padding: 0.5rem;
+		padding: 0.1rem;
+		padding-top: 0.5rem;
 		flex-shrink: 0;
 	}
 

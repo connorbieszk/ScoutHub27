@@ -52,13 +52,13 @@
 <nav class="navbar">
 	<div class="navbar-left">
 		<div class="brand-group">
-			<Button href="/" onclick={closeMenu} size="md">HexScouter BioCore</Button>
+			<Button href="/" onclick={closeMenu} size="lg">HexScouter BioCore</Button>
 		</div>
 	</div>
 
 	<div class="route-selector">
 		<div class="route-dropdown" bind:this={dropdownElement}>
-			<Button onclick={() => (menuOpen = !menuOpen)} size="md">
+			<Button onclick={() => (menuOpen = !menuOpen)} size="lg">
 				{links.find((x) => x.href === currentPath)?.label ?? 'Menu'} ▾
 			</Button>
 
@@ -66,7 +66,7 @@
 				<div class="route-menu" in:slide={{ duration: 150 }} out:slide={{ duration: 100 }}>
 					{#each links as link (link.href)}
 						{#if link.href !== currentPath}
-							<Button onclick={() => navigate(link.href)} size="md">
+							<Button onclick={() => navigate(link.href)} size="lg">
 								{link.label}
 							</Button>
 						{/if}

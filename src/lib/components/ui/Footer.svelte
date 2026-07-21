@@ -56,14 +56,14 @@
 <div class="footer">
 	<div class="footer-content">
 		<div class="back-button">
-			<Button onclick={goBack} size="md">⏎</Button>
+			<Button onclick={goBack} size="lg">⏎</Button>
 		</div>
 
 		<div class="footer-text">
-			© 2026 Cedarburg Robotics.
+			<p>© 2026 Cedarburg Robotics.
 			<br /> All Rights Reserved.
 			<br />
-			{isOnline ? 'You are Online!' : 'You are Offline :('}
+			{isOnline ? 'You are Online!' : 'You are Offline :('}</p>
 		</div>
 	</div>
 </div>
