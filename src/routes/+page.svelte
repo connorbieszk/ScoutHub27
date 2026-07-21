@@ -11,7 +11,7 @@
 	<div class="actions">
 		<Button href="/scouting">Scouting</Button>
 		<Button href="/members">Member Management</Button>
-		<Button href="/data">Data Viewing</Button>
+		<Button href="/data">Data Viewer</Button>
 	</div>
 </div>
 
