@@ -16,25 +16,20 @@ export default defineConfig({
 
 			workbox: {
 				globPatterns: [
-					'**/*.{js,css,html,png,svg,ico,woff2,json}'
-				]
+					'**/*.{js,css,html,ico,png,svg,woff2,webp}'
+				],
+
+				navigateFallback: '/'
 			},
 
 			manifest: {
 				name: 'HexScouter BioCore',
-				short_name: 'HexScouter',
-				description: 'FRC scouting and team management app',
-				start_url: '.',
+				short_name: 'BioCore',
+				description: 'FRC scouting application',
 				display: 'standalone',
+				start_url: '/',
 				background_color: '#000000',
-				theme_color: '#000000',
-				icons: [
-					{
-						src: '/favicon.png',
-						sizes: '512x512',
-						type: 'image/png'
-					}
-				]
+				theme_color: '#000000'
 			}
 		})
 	]
