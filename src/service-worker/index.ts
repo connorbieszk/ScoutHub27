@@ -24,13 +24,34 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
-	// Create a new cache and add all files to it
-	async function addFilesToCache() {
-		const cache = await caches.open(CACHE);
-		await cache.addAll(ASSETS);
-	}
+	event.waitUntil(
+		(async () => {
+			const cache = await caches.open(CACHE);
 
-	event.waitUntil(addFilesToCache());
+			// Cache JS/CSS/images/etc.
+			await cache.addAll(ASSETS);
+
+			// Cache every SvelteKit route
+			const routesResponse = await fetch('/routes.json');
+			const routes: string[] = await routesResponse.json();
+
+			await Promise.all(
+				routes.map(async (route) => {
+					try {
+						const response = await fetch(route);
+
+						if (response.ok) {
+							await cache.put(route, response.clone());
+						}
+					} catch (err) {
+						console.warn(`Failed to cache ${route}`, err);
+					}
+				})
+			);
+
+			await self.skipWaiting();
+		})()
+	);
 });
 
 self.addEventListener('activate', (event) => {

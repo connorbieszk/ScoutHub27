@@ -1,8 +1,6 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.png';
 	import '$lib/styles/style.css';
-	import { browser } from '$app/environment';
-	import { afterNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { getTheme, setTheme } from '$lib/themes';
 	import NavigationBar from '$lib/components/ui/NavigationBar.svelte';

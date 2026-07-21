@@ -1,32 +1,56 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
-import { SvelteKitPWA } from '@vite-pwa/sveltekit';
+import { readdirSync, statSync, writeFileSync } from 'fs';
+import { join, resolve } from 'path';
 
-const appBase = '/ScoutHub27/';
+const appBase = "/ScoutHub27"
+
+function getRoutes(dir: string, base = ''): string[] {
+	const routes: string[] = [];
+
+	for (const file of readdirSync(dir)) {
+		const path = join(dir, file);
+		const stat = statSync(path);
+
+		if (stat.isDirectory()) {
+			// Ignore SvelteKit special folders
+			if (
+				file.startsWith('(') ||
+				file.startsWith('_') ||
+				file === 'api'
+			) {
+				continue;
+			}
+
+			routes.push(...getRoutes(path, `${base}/${file}`));
+		} else if (file === '+page.svelte' || file === '+page.ts' || file === '+page.js') {
+			routes.push(base || '/');
+		}
+	}
+
+	return routes;
+}
+
+function generateRoutes() {
+	return {
+		name: 'generate-routes',
+		buildStart() {
+			const routes = getRoutes(resolve('src/routes'));
+
+			writeFileSync(
+				resolve('static/routes.json'),
+				JSON.stringify(routes, null, 2)
+			);
+
+			console.log('Generated routes:', routes);
+		}
+	};
+}
 
 export default defineConfig({
 	base: appBase,
 	plugins: [
-		sveltekit(),
-
-		SvelteKitPWA({
-			registerType: 'autoUpdate',
-
-			workbox: {
-				navigateFallback: `${appBase}index.html`,
-				navigateFallbackAllowlist: [/^\/ScoutHub27\//],
-				globPatterns: ['**/*.{js,css,html,ico,png,webp,webmanifest,json}']
-			},
-
-			manifest: {
-				name: 'HexScouter BioCore',
-				short_name: 'BioCore',
-				scope: appBase,
-				start_url: appBase,
-				display: 'standalone',
-				background_color: '#000000',
-				theme_color: '#000000'
-			}
-		})
+		generateRoutes(),
+		sveltekit()
 	]
 });
