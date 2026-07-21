@@ -27,7 +27,7 @@
 		}
 	} as const;
 
-	const currentSize = sizeStyles[size];
+	const currentSize = $derived(sizeStyles[size]);
 	const percent = $derived(Math.min(100, Math.max(0, ((value - min) / Math.max(1, max - min)) * 100)));
 </script>
 

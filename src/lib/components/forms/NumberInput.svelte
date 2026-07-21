@@ -39,7 +39,7 @@
 		}
 	} as const;
 
-	const currentSize = sizeStyles[size];
+	const currentSize = $derived(sizeStyles[size]);
 
 	function addNumber(integer: number) {
 		state += integer;

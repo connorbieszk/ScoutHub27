@@ -31,7 +31,7 @@
 		}
 	} as const;
 
-	const currentSize = sizeStyles[size];
+	const currentSize = $derived(sizeStyles[size]);
 </script>
 
 <label class="field">

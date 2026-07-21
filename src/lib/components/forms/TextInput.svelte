@@ -33,7 +33,7 @@
 		}
 	} as const;
 
-	const currentSize = sizeStyles[size];
+	const currentSize = $derived(sizeStyles[size]);
 
 	function normalizeForOutput(rawValue: string) {
 		return rawValue.replace(/\r\n?/g, '\n');

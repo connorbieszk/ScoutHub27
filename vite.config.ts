@@ -2,6 +2,8 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 
+const appBase = '/ScoutHub27/';
+
 export default defineConfig({
 	plugins: [
 		sveltekit(),
@@ -10,14 +12,14 @@ export default defineConfig({
 			registerType: 'autoUpdate',
 
 			workbox: {
-				navigateFallback: '/ScoutHub27/index.html'
+				navigateFallback: `${appBase}index.html`
 			},
 
 			manifest: {
 				name: 'HexScouter BioCore',
 				short_name: 'BioCore',
-				scope: '/ScoutHub27/',
-				start_url: '/ScoutHub27/',
+				scope: appBase,
+				start_url: appBase,
 				display: 'standalone',
 				background_color: '#000000',
 				theme_color: '#000000'

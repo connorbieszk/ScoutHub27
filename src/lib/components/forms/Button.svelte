@@ -10,7 +10,7 @@
 		type = 'button',
 		size = 'lg'
 	}: {
-		href?: Parameters<typeof resolve>[0];
+		href?: string;
 		onclick?: () => void;
 		children: Snippet;
 		variant?: 'default' | 'primary' | 'danger';
@@ -37,15 +37,15 @@
 		}
 	} as const;
 
-	// svelte-ignore state_referenced_locally
-	const currentSize = sizeStyles[size];
+	const currentSize = $derived(sizeStyles[size]);
+	const resolvedHref = $derived(href ? (resolve as unknown as (value: string) => string)(href) : undefined);
 </script>
 
 {#if href}
 	<a
 		class={variant}
 		style={`--button-font-size: ${currentSize.fontSize}; --button-padding: ${currentSize.padding}; --button-min-height: ${currentSize.minHeight}`}
-		href={resolve(href)}
+		href={resolvedHref}
 		{onclick}
 	>
 		{@render children()}

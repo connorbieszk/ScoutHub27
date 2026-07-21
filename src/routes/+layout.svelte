@@ -1,28 +1,35 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.png';
 	import '$lib/styles/style.css';
+	import { browser } from '$app/environment';
+	import { afterNavigate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { getTheme, setTheme } from '$lib/themes';
 	import NavigationBar from '$lib/components/ui/NavigationBar.svelte';
 	import Footer from '$lib/components/ui/Footer.svelte';
-	import { registerSW } from 'virtual:pwa-register';
 
-	registerSW({
-		immediate: true
-	});
-	import { afterNavigate } from '$app/navigation';
+	const basePath = import.meta.env.BASE_URL || '/ScoutHub27/';
 
 	afterNavigate(async () => {
-		if ('serviceWorker' in navigator) {
-			const registration = await navigator.serviceWorker.getRegistration();
-			await registration?.update();
-		}
+		if (!browser || !('serviceWorker' in navigator)) return;
+
+		const registration = await navigator.serviceWorker.getRegistration(basePath);
+		await registration?.update();
 	});
 
 	let { children } = $props();
 
 	onMount(() => {
 		setTheme(getTheme());
+
+		if (!browser || !('serviceWorker' in navigator)) return;
+
+		navigator.serviceWorker
+			.register(`${basePath}sw.js`, { scope: basePath })
+			.then((registration) => registration.update())
+			.catch((error) => {
+				console.error('Service worker registration failed:', error);
+			});
 	});
 </script>
 
