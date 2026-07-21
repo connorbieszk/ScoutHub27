@@ -21,10 +21,6 @@ export default defineConfig({
 			},
 
 			workbox: {
-				globPatterns: [
-					'**/*.{js,css,html,png,svg,ico,woff2,json}'
-				],
-
 				modifyURLPrefix: {
 					'': '/ScoutHub27/'
 				},

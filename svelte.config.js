@@ -12,7 +12,9 @@ export default {
 		adapter: adapter({
 			fallback: '404.html'
 		}),
-
+		prerender: {
+			handleHttpError: 'warn'
+		},
 		paths: {
 			base: process.env.NODE_ENV === 'production'
 				? '/ScoutHub27'
