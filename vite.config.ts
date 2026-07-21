@@ -8,6 +8,7 @@ export default defineConfig({
 
 		SvelteKitPWA({
 			base: '/ScoutHub27/',
+			scope: '/ScoutHub27/',
 			registerType: 'autoUpdate',
 
 			manifest: {
@@ -23,8 +24,16 @@ export default defineConfig({
 			workbox: {
 				globPatterns: [
 					'**/*.{js,css,html,png,svg,ico,woff2,json}'
+				],
+
+				navigateFallback: '/ScoutHub27/index.html',
+
+				navigateFallbackDenylist: [
+					/^\/ScoutHub27\/api\//,
+					/^\/ScoutHub27\/_app\//
 				]
 			},
+
 			devOptions: {
 				enabled: true
 			}
