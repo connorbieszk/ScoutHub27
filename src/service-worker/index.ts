@@ -32,7 +32,7 @@ self.addEventListener('install', (event) => {
 			await cache.addAll(ASSETS);
 
 			// Cache every SvelteKit route
-			const routesResponse = await fetch('/routes.json');
+			const routesResponse = await fetch('/ScoutHub27/routes.json');
 			const routes: string[] = await routesResponse.json();
 
 			await Promise.all(
