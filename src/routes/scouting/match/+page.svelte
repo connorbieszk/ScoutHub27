@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import Button from '$lib/components/forms/Button.svelte';
 	import Checkbox from '$lib/components/forms/Checkbox.svelte';
 	import Dropdown from '$lib/components/forms/Dropdown.svelte';
@@ -6,6 +7,7 @@
 
 	let page = $state(0);
 	let menuOpen = $state(false);
+	let menuElement: HTMLDivElement | null = $state(null);
 
 	// Match Information
 	let scouterName = $state('');
@@ -27,6 +29,21 @@
 	function toggleMenu() {
 		menuOpen = !menuOpen;
 	}
+
+	onMount(() => {
+		const handleOutsideClick = (event: MouseEvent) => {
+			if (!menuElement) return;
+			if (!menuElement.contains(event.target as Node)) {
+				menuOpen = false;
+			}
+		};
+
+		document.addEventListener('click', handleOutsideClick);
+
+		return () => {
+			document.removeEventListener('click', handleOutsideClick);
+		};
+	});
 </script>
 
 <svelte:head>
@@ -36,6 +53,10 @@
 <div class="content">
 	<div class="pages">
 		{#if page === 0}
+			<h4>
+				&nbsp; Please make sure the Team Number and Match Number are correct, incorrect data wastes your
+				time and negatively impacts the team
+			</h4>
 			<Dropdown
 				label="Scouter Name"
 				value={scouterName}
@@ -63,11 +84,6 @@
 				label="Team Number"
 			/>
 			<br />
-			<h3>
-				Please make sure the Team Number and Match Number are correct, incorrect data wastes your
-				time and negatively impacts the team
-			</h3>
-			<br />
 			<Checkbox bind:state={teamAlliance} inactiveColor="--red" activeColor="--blue"
 				>Toggle to select Alliance</Checkbox
 			>
@@ -88,7 +104,7 @@
 		<Button onclick={() => goToPage(page - 1)} size="sm">Back</Button>
 	</div>
 
-	<div class="current-page">
+	<div class="current-page" bind:this={menuElement}>
 		<Button onclick={toggleMenu} size="sm">
 			{pages[page]} ▾
 		</Button>

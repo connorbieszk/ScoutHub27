@@ -1,13 +1,45 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
+	import { afterNavigate, goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
+	import Button from '$lib/components/forms/Button.svelte';
+	import { getHistory, popHistory } from '$lib/stores/history';
 
-	let isOnline = $state(true); // Or use writable(true) in older Svelte versions
+	const links = [
+		{ href: '/scouting', label: 'Scouting' },
+		{ href: '/members', label: 'Members' },
+		{ href: '/data', label: 'Data' },
+		{ href: '/settings', label: 'Settings' }
+	] as const;
+
+	let isOnline = $state(true);
+
+	afterNavigate(({ to }) => {
+		if (to?.url.pathname) {
+			const match = links.find((link) => link.href === to.url.pathname);
+			if (match) {
+				void match;
+			}
+		}
+	});
+
+	function goBack() {
+		const history = getHistory();
+		const previousRoute = history.at(-2);
+
+		popHistory();
+
+		if (!previousRoute) {
+			void goto(resolve('/'));
+			return;
+		}
+
+		void goto(resolve(previousRoute));
+	}
 
 	onMount(() => {
-		// Set initial state
 		isOnline = navigator.onLine;
 
-		// Listen for network changes
 		const goOnline = () => (isOnline = true);
 		const goOffline = () => (isOnline = false);
 
@@ -22,8 +54,40 @@
 </script>
 
 <div class="footer">
-	<br />
-	© 2026 Cedarburg Robotics. All Rights Reserved. <br />{isOnline
-		? 'You are Online!'
-		: 'You are Offline :('}<br /><br />
+	<div class="footer-content">
+		<div class="back-button">
+			<Button onclick={goBack} size="md">⏎</Button>
+		</div>
+
+		<div class="footer-text">
+			© 2026 Cedarburg Robotics.
+			<br /> All Rights Reserved.
+			<br />
+			{isOnline ? 'You are Online!' : 'You are Offline :('}
+		</div>
+	</div>
 </div>
+
+<style>
+	.footer {
+		width: 100%;
+	}
+
+	.footer-content {
+		position: relative;
+		display: flex;
+		width: 100%;
+		height: 4rem;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.back-button {
+		position: absolute;
+		left: 0;
+	}
+
+	.footer-text {
+		text-align: center;
+	}
+</style>

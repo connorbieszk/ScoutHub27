@@ -36,6 +36,23 @@ export function setHistory(items: RouteId[]) {
 	);
 }
 
+export function popHistory(): RouteId | undefined {
+	if (!browser) return undefined;
+
+	const lastItem = internalHistory.at(-1);
+
+	if (lastItem === undefined) return undefined;
+
+	internalHistory = internalHistory.slice(0, -1);
+
+	localStorage.setItem(
+		"internalHistory",
+		JSON.stringify(internalHistory)
+	);
+
+	return lastItem;
+}
+
 export function addHistory(item: RouteId) {
 	if (!browser) return;
 

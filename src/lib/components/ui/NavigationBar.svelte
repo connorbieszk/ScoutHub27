@@ -1,12 +1,12 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import Button from '$lib/components/forms/Button.svelte';
-	import { getHistory, setHistory } from '$lib/stores/history';
 
 	let menuOpen = $state(false);
-	let showBackButton = $state(true);
+	let dropdownElement: HTMLDivElement | null = $state(null);
 
 	const links = [
 		{ href: '/scouting', label: 'Scouting' },
@@ -29,31 +29,23 @@
 		void goto(resolve(route));
 	}
 
-	function goBack() {
-		const history = getHistory();
-		const previousRoute = history.at(-2);
-
-		if (!previousRoute) {
-			void goto(resolve('/'));
-			return;
-		}
-
-		setHistory(history.slice(0, -1));
-		void goto(resolve(previousRoute));
-	}
-
-	afterNavigate(({ from, to }) => {
+	afterNavigate(() => {
 		menuOpen = false;
+	});
 
-		if (to?.url.pathname) {
-			const match = links.find((link) => link.href === to.url.pathname);
-
-			if (match) {
-				currentPath = match.href;
+	onMount(() => {
+		const handleOutsideClick = (event: MouseEvent) => {
+			if (!dropdownElement) return;
+			if (!dropdownElement.contains(event.target as Node)) {
+				menuOpen = false;
 			}
-		}
+		};
 
-		showBackButton = from !== null && getHistory().length > 1;
+		document.addEventListener('click', handleOutsideClick);
+
+		return () => {
+			document.removeEventListener('click', handleOutsideClick);
+		};
 	});
 </script>
 
@@ -61,15 +53,11 @@
 	<div class="navbar-left">
 		<div class="brand-group">
 			<Button href="/" onclick={closeMenu} size="md">HexScouter BioCore</Button>
-
-			{#if showBackButton}
-				<Button onclick={goBack} size="md" class="back-button">⏎</Button>
-			{/if}
 		</div>
 	</div>
 
 	<div class="route-selector">
-		<div class="route-dropdown">
+		<div class="route-dropdown" bind:this={dropdownElement}>
 			<Button onclick={() => (menuOpen = !menuOpen)} size="md">
 				{links.find((x) => x.href === currentPath)?.label ?? 'Menu'} ▾
 			</Button>
