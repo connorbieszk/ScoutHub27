@@ -2,11 +2,10 @@
 /// <reference types="@sveltejs/kit" />
 
 import { build, files, prerendered, version } from '$service-worker';
-	import { version as gitVersion } from '$app/environment';
 
 const sw = self as unknown as ServiceWorkerGlobalScope;
 
-const CACHE = `sveltekit-cache-${version}-${gitVersion}`;
+const CACHE = `sveltekit-cache-${version}`;
 
 const ASSETS = [
 	...build,
