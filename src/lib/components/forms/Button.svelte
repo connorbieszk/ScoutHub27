@@ -8,7 +8,8 @@
 		children,
 		variant = 'default',
 		type = 'button',
-		size = 'lg'
+		size = 'lg',
+		class: className = undefined
 	}: {
 		href?: string;
 		onclick?: () => void;
@@ -16,6 +17,7 @@
 		variant?: 'default' | 'primary' | 'danger';
 		type?: 'button' | 'submit' | 'reset';
 		size?: 'sm' | 'md' | 'lg';
+		class?: string;
 	} = $props();
 
 	const sizeStyles = {
@@ -44,7 +46,7 @@
 
 {#if href}
 	<a
-		class={variant}
+		class={[variant, className].filter(Boolean).join(' ')}
 		style={`--button-font-size: ${currentSize.fontSize}; --button-padding: ${currentSize.padding}; --button-min-height: ${currentSize.minHeight}`}
 		href={resolvedHref}
 		{onclick}
@@ -53,7 +55,7 @@
 	</a>
 {:else}
 	<button
-		class={variant}
+		class={[variant, className].filter(Boolean).join(' ')}
 		style={`--button-font-size: ${currentSize.fontSize}; --button-padding: ${currentSize.padding}; --button-min-height: ${currentSize.minHeight}`}
 		{type}
 		{onclick}
