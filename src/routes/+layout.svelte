@@ -8,6 +8,7 @@
 	import NavigationBar from '$lib/components/ui/NavigationBar.svelte';
 	import Footer from '$lib/components/ui/Footer.svelte';
 
+<<<<<<< HEAD
 	const basePath = import.meta.env.BASE_URL || '/ScoutHub27/';
 
 	afterNavigate(async () => {
@@ -16,10 +17,14 @@
 		const registration = await navigator.serviceWorker.getRegistration(basePath);
 		await registration?.update();
 	});
+=======
+	
+>>>>>>> parent of d00dd69 (fix service worker)
 
 	let { children } = $props();
 
 	onMount(() => {
+<<<<<<< HEAD
 		setTheme(getTheme());
 
 		if (!browser || !('serviceWorker' in navigator)) return;
@@ -31,6 +36,10 @@
 				console.error('Service worker registration failed:', error);
 			});
 	});
+=======
+        setTheme(getTheme());
+    });
+>>>>>>> parent of d00dd69 (fix service worker)
 </script>
 
 <svelte:head>
