@@ -75,6 +75,7 @@
     --font-black: 900;
 }
 
+
 * {
     font-family: var(--font-family);
     transition:
@@ -87,6 +88,7 @@ html, body {
 	height: 100%;
 	margin: .25rem;
 	overflow: hidden;
+    touch-action: pan-x pan-y;
 }
 
 body {

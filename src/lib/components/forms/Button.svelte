@@ -71,6 +71,7 @@
 		font-family: var(--font-family);
 		font-size: var(--button-font-size);
 		font-weight: 600;
+		touch-action: manipulation;
 
 		padding: var(--button-padding);
 		min-height: var(--button-min-height);
