@@ -58,7 +58,7 @@
 	</Button>
     <br>
 
-	<Checkbox state={checkbox1State}>
+	<Checkbox bind:state={checkbox1State}>
 		Touch friendly toggle
 	</Checkbox>
 

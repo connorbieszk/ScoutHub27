@@ -5,12 +5,16 @@
 		children,
 		state = $bindable(false),
 		type = 'button',
-		size = 'md'
+		size = 'md',
+		inactiveColor = 'var(--background-3)',
+		activeColor = 'var(--green)'
 	}: {
 		children: Snippet;
 		state: boolean;
 		type?: 'button' | 'submit' | 'reset';
 		size?: 'sm' | 'md' | 'lg';
+		inactiveColor?: string;
+		activeColor?: string;
 	} = $props();
 
 	const sizeStyles = {
@@ -38,6 +42,12 @@
 	} as const;
 
 	const currentSize = $derived(sizeStyles[size]);
+	const resolvedInactiveColor = $derived(
+		inactiveColor.startsWith('--') ? `var(${inactiveColor})` : inactiveColor
+	);
+	const resolvedActiveColor = $derived(
+		activeColor.startsWith('--') ? `var(${activeColor})` : activeColor
+	);
 
 	function toggleState() {
 		state = !state;
@@ -47,7 +57,7 @@
 <div
 	class="checkboxContainer"
 	class:active={state}
-	style={`--checkbox-font-size: ${currentSize.fontSize}; --checkbox-gap: ${currentSize.gap}; --checkbox-width: ${currentSize.width}; --checkbox-height: ${currentSize.height}; --checkbox-padding: ${currentSize.padding};`}
+	style={`--checkbox-font-size: ${currentSize.fontSize}; --checkbox-gap: ${currentSize.gap}; --checkbox-width: ${currentSize.width}; --checkbox-height: ${currentSize.height}; --checkbox-padding: ${currentSize.padding}; --checkbox-inactive-color: ${resolvedInactiveColor}; --checkbox-active-color: ${resolvedActiveColor};`}
 >
 	{@render children()}
 
@@ -83,7 +93,7 @@
 
 		padding: var(--checkbox-padding);
 
-		background-color: var(--background-3);
+		background-color: var(--checkbox-inactive-color);
 		border: 1px solid var(--background-4);
 		border-radius: var(--default-border-radius);
 
@@ -119,12 +129,12 @@
 	}
 
 	.active button {
-		background-color: var(--green);
-		border-color: var(--green);
+		background-color: var(--checkbox-active-color);
+		border-color: var(--checkbox-active-color);
 	}
 
 	button:focus-visible {
-		outline: 2px solid var(--green);
+		outline: 2px solid var(--checkbox-active-color);
 		outline-offset: 2px;
 	}
 </style>

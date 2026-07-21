@@ -6,7 +6,7 @@
 	import { getHistory, setHistory } from '$lib/stores/history';
 
 	let menuOpen = $state(false);
-	let showBackButton = $state(false);
+	let showBackButton = $state(true);
 
 	const links = [
 		{ href: '/scouting', label: 'Scouting' },
@@ -15,7 +15,19 @@
 		{ href: '/settings', label: 'Settings' }
 	] as const;
 
-	const closeMenu = () => (menuOpen = false);
+	type Route = (typeof links)[number]['href'];
+
+	let currentPath = $state<Route>('/scouting');
+
+	function closeMenu() {
+		menuOpen = false;
+	}
+
+	function navigate(route: Route) {
+		currentPath = route;
+		menuOpen = false;
+		void goto(resolve(route));
+	}
 
 	function goBack() {
 		const history = getHistory();
@@ -30,10 +42,18 @@
 		void goto(resolve(previousRoute));
 	}
 
-	afterNavigate(({ from }) => {
+	afterNavigate(({ from, to }) => {
 		menuOpen = false;
-		const history = getHistory();
-		showBackButton = from !== null && history.length > 1;
+
+		if (to?.url.pathname) {
+			const match = links.find((link) => link.href === to.url.pathname);
+
+			if (match) {
+				currentPath = match.href;
+			}
+		}
+
+		showBackButton = from !== null && getHistory().length > 1;
 	});
 </script>
 
@@ -48,38 +68,25 @@
 		</div>
 	</div>
 
-	<button
-		class="menu-button"
-		aria-label="Toggle navigation menu"
-		aria-expanded={menuOpen}
-		aria-controls="mobile-nav"
-		onclick={() => (menuOpen = !menuOpen)}
-	>
-		☰
-	</button>
-
-	<div class="navbar-links desktop">
-		{#each links as link (link.href)}
-			<Button href={link.href} size="md">
-				{link.label}
+	<div class="route-selector">
+		<div class="route-dropdown">
+			<Button onclick={() => (menuOpen = !menuOpen)} size="md">
+				{links.find((x) => x.href === currentPath)?.label ?? 'Menu'} ▾
 			</Button>
-		{/each}
-	</div>
 
-	{#if menuOpen}
-		<div
-			id="mobile-nav"
-			class="navbar-links mobile"
-			in:slide={{ duration: 200 }}
-			out:slide={{ duration: 150 }}
-		>
-			{#each links as link (link.href)}
-				<Button href={link.href} size="md">
-					{link.label}
-				</Button>
-			{/each}
+			{#if menuOpen}
+				<div class="route-menu" in:slide={{ duration: 150 }} out:slide={{ duration: 100 }}>
+					{#each links as link (link.href)}
+						{#if link.href !== currentPath}
+							<Button onclick={() => navigate(link.href)} size="md">
+								{link.label}
+							</Button>
+						{/if}
+					{/each}
+				</div>
+			{/if}
 		</div>
-	{/if}
+	</div>
 </nav>
 
 <style>
@@ -103,6 +110,7 @@
 	.navbar-left {
 		display: flex;
 		align-items: center;
+
 		min-width: 0;
 		flex: 1;
 	}
@@ -111,8 +119,8 @@
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;
+
 		min-width: 0;
-		flex-wrap: wrap;
 	}
 
 	.brand-group :global(a),
@@ -126,59 +134,58 @@
 		flex-shrink: 0;
 	}
 
-	.navbar-links {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-	}
+	/* Center page selector */
+.route-selector {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
 
-	.mobile {
-		display: none;
-	}
+	margin-left: auto;
+}
 
-	.menu-button {
-		display: none;
+.route-dropdown {
+	position: relative;
+	display: flex;
+		right: 0.5rem;
 
-		font-size: 2rem;
-		padding: 0.25rem 0.75rem;
+	align-items: center;
+}
 
-		color: var(--foreground-1);
-		background-color: var(--background-3);
+.route-menu {
+	position: absolute;
 
-		border: none;
-		border-radius: var(--default-border-radius);
+	top: calc(100% + 0.5rem);
+	right: -.25rem;
 
-		cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
 
-		transition:
-			background-color 0.2s ease,
-			transform 0.15s ease;
-	}
+	padding: 0.5rem;
+	padding-right: 1rem;
 
-	.menu-button:hover {
-		background-color: var(--background-4);
-		transform: scale(1.05);
-	}
+	background-color: var(--background-2);
+	border: 1px solid var(--background-4);
+	border-radius: var(--default-border-radius);
 
+	z-index: 100;
+}
+
+.route-menu :global(button),
+.route-menu :global(a) {
+	width: 100%;
+	white-space: nowrap;
+	justify-content: center;
+}
+
+	/* Mobile adjustments */
 	@media (max-width: 700px) {
 		.navbar {
 			gap: 0.5rem;
 		}
 
-		.navbar-left {
-			flex: 1 1 auto;
-		}
-
 		.brand-group {
 			gap: 0.35rem;
-		}
-
-		.desktop {
-			display: none;
-		}
-
-		.menu-button {
-			display: block;
 		}
 
 		:global(.back-button) {
@@ -186,34 +193,12 @@
 			min-width: 2.4rem;
 		}
 
-		.mobile {
-			position: absolute;
-
-			top: calc(100% + 0.5rem);
-			left: 0;
-
-			width: 100%;
-			box-sizing: border-box;
-
-			display: flex;
-			flex-direction: column;
-			align-items: stretch;
-			gap: 0.5rem;
-
-			padding: 0.5rem;
-
-			background-color: var(--background-3);
-			border-radius: var(--default-border-radius);
-
-			z-index: 100;
+		.route-selector {
+			flex: 0 0 auto;
 		}
 
-		/* These assume Button renders an <a> or <button> as its root element.
-		   If it doesn't, I'd recommend adding a `fullWidth` prop to Button instead. */
-		.mobile :global(a),
-		.mobile :global(button) {
-			width: 100%;
-			box-sizing: border-box;
+		.route-menu {
+			right: 0;
 		}
 	}
 </style>
