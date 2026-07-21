@@ -13,9 +13,11 @@ export default {
 		prerender: {
 			handleHttpError: 'warn'
 		},
-
 		paths: {
 			base: '/ScoutHub27'
+		},
+		alias: {
+			$lib: 'src/lib'
 		}
 	}
 };

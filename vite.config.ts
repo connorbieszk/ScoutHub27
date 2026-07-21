@@ -5,6 +5,7 @@ import { SvelteKitPWA } from '@vite-pwa/sveltekit';
 const appBase = '/ScoutHub27/';
 
 export default defineConfig({
+	base: appBase,
 	plugins: [
 		sveltekit(),
 
@@ -12,7 +13,9 @@ export default defineConfig({
 			registerType: 'autoUpdate',
 
 			workbox: {
-				navigateFallback: `${appBase}index.html`
+				navigateFallback: `${appBase}index.html`,
+				navigateFallbackAllowlist: [/^\/ScoutHub27\//],
+				globPatterns: ['**/*.{js,css,html,ico,png,webp,webmanifest,json}']
 			},
 
 			manifest: {
