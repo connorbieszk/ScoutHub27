@@ -7,12 +7,6 @@ const sw = self as unknown as ServiceWorkerGlobalScope;
 
 const CACHE = `sveltekit-cache-${version}`;
 
-/**
- * Everything that should exist offline immediately:
- * - Vite/SvelteKit generated assets
- * - static/ folder
- * - prerendered routes
- */
 const ASSETS = [
 	...build,
 	...files,
@@ -24,8 +18,16 @@ sw.addEventListener('install', (event) => {
 		(async () => {
 			const cache = await caches.open(CACHE);
 
-			await cache.addAll(
-				ASSETS.map((asset) => new URL(asset, sw.location.origin).pathname)
+			await Promise.all(
+				ASSETS.map(async (asset) => {
+					const url = new URL(asset, sw.location.origin).pathname;
+
+					try {
+						await cache.add(url);
+					} catch (err) {
+						console.warn('Failed caching:', url, err);
+					}
+				})
 			);
 
 			await sw.skipWaiting();
@@ -54,49 +56,44 @@ sw.addEventListener('activate', (event) => {
 sw.addEventListener('fetch', (event) => {
 	const request = event.request;
 
-	// Only cache GET requests
 	if (request.method !== 'GET') return;
+
+	const isNavigation =
+		request.mode === 'navigate';
 
 	event.respondWith(
 		(async () => {
 			const cache = await caches.open(CACHE);
 
-			/**
-			 * Cache-first:
-			 * - Great for JS/CSS/images/static files
-			 * - Makes the app work offline
-			 */
-			const cached = await cache.match(request);
+			if (!isNavigation) {
+				const cached = await cache.match(request);
 
-			if (cached) {
-				return cached;
+				if (cached) return cached;
 			}
 
 			try {
 				const response = await fetch(request);
 
-				// Cache successful responses
-				if (
-					response.ok &&
-					response.status === 200 &&
-					response.type !== 'opaque'
-				) {
+				if (response.ok) {
 					await cache.put(request, response.clone());
 				}
 
 				return response;
 			} catch {
-				/**
-				 * Offline fallback:
-				 * Try cached page assets
-				 */
-				const fallback = await cache.match('/');
+				if (isNavigation) {
+					const fallback = await cache.match('/');
 
-				if (fallback) {
-					return fallback;
+					if (fallback) {
+						return fallback;
+					}
+
+					return new Response('Offline', {
+						status: 503,
+						statusText: 'Service Unavailable'
+					});
 				}
 
-				throw new Error('Offline and resource not cached');
+				throw new Error('Offline');
 			}
 		})()
 	);

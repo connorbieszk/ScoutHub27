@@ -11,6 +11,7 @@ export default {
 			strict: false
 		}),
 		prerender: {
+			entries: ['*'],
 			handleHttpError: 'warn'
 		},
 		paths: {
