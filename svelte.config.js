@@ -15,7 +15,7 @@ export default {
 
 		paths: {
 			base: process.env.NODE_ENV === 'production'
-				? '/ScoutingHub27'
+				? '/ScoutHub27'
 				: ''
 		}
 	}

@@ -7,6 +7,7 @@ export default defineConfig({
 		sveltekit(),
 
 		SvelteKitPWA({
+			base: '/ScoutHub27/',
 			registerType: 'autoUpdate',
 
 			manifest: {
@@ -14,7 +15,7 @@ export default defineConfig({
 				short_name: 'BioCore',
 				description: 'FRC scouting application',
 				display: 'standalone',
-				start_url: '/ScoutingHub27/',
+				start_url: '/ScoutHub27/',
 				background_color: '#000000',
 				theme_color: '#000000'
 			},
