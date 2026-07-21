@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import Button from '$lib/components/forms/Button.svelte';
 	import { setTheme, Themes } from '$lib/themes';
+	import { version } from '$app/environment';
 
 	let onboarded = $state<boolean | null>(null);
 
@@ -38,6 +39,7 @@
 			<h2>
 				Welcome to the 2027 scouting app.<br />
 				Choose where you would like to go.
+				<br> You are using version {version}
 			</h2>
 		</div>
 
