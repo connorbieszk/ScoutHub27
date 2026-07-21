@@ -7,13 +7,13 @@ export default defineConfig({
 		sveltekit(),
 
 		SvelteKitPWA({
-			scope: '/ScoutHub27/',
 			registerType: 'autoUpdate',
+
+			scope: '/ScoutHub27/',
 
 			manifest: {
 				name: 'HexScouter BioCore',
 				short_name: 'BioCore',
-				description: 'FRC scouting application',
 				display: 'standalone',
 				start_url: '/ScoutHub27/',
 				background_color: '#000000',
@@ -21,20 +21,7 @@ export default defineConfig({
 			},
 
 			workbox: {
-				modifyURLPrefix: {
-					'': '/ScoutHub27/'
-				},
-
-				navigateFallback: '/ScoutHub27/index.html',
-
-				navigateFallbackDenylist: [
-					/^\/ScoutHub27\/api\//,
-					/^\/ScoutHub27\/_app\//
-				]
-			},
-
-			devOptions: {
-				enabled: true
+				navigateFallback: '/ScoutHub27/index.html'
 			}
 		})
 	]
