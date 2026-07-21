@@ -5,7 +5,11 @@
 	import { getTheme, setTheme } from '$lib/themes';
 	import NavigationBar from '$lib/components/ui/NavigationBar.svelte';
 	import Footer from '$lib/components/ui/Footer.svelte';
+	import { registerSW } from 'virtual:pwa-register';
 
+	registerSW({
+		immediate: true
+	});
 	import { afterNavigate } from '$app/navigation';
 
 	afterNavigate(async () => {
