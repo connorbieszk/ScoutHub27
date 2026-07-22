@@ -12,7 +12,8 @@
 		<Button href="/scouting/match">Match</Button>
 		<Button href="/scouting/precomp">Pre Competition</Button>
 		<Button href="/scouting/pit">Pit Scouting</Button>
-        <Button href="/scouting/practice">Practice Scouting</Button>
+        <Button href="/scouting/practice">Practice Scouting</Button>	
+		<Button href="/scouting/offline">Your Offline Data</Button>
 	</div>
 </div>
 
