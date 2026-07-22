@@ -72,13 +72,15 @@
 
 	if ('storageBuckets' in navigator) {
 		try {
-			const buckets = await navigator.storageBuckets.keys();
+			const storageBuckets = navigator.storageBuckets;
 
-			await Promise.all(
-				buckets.map((bucket: string) =>
-					navigator.storageBuckets.delete(bucket)
-				)
-			);
+			if (storageBuckets) {
+				const buckets = await storageBuckets.keys();
+
+				await Promise.all(
+					buckets.map((bucket: string) => storageBuckets.delete(bucket))
+				);
+			}
 		} catch {
 			// Unsupported or blocked
 		}

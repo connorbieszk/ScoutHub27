@@ -18,7 +18,7 @@
 	});
 
 	afterNavigate(() => {
-		if (page.route.id) {
+		if (page.route.id && page.route.id != "/scouting/offline/edit") {
 			addHistory(page.route.id);
 		}
 	});

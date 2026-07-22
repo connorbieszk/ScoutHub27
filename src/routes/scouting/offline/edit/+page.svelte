@@ -9,12 +9,21 @@
 	import TextInput from '$lib/components/forms/TextInput.svelte';
 
 	import { usersList } from '$lib/config';
-	import { getScoutingForm, clearScoutingForm, saveDraftAsFinal } from '$lib/stores/match/index.svelte';
-	
+	import {
+		getScoutingForm,
+		clearScoutingForm,
+		getSavedMatch,
+		setScoutingForm,
+		updateSavedMatch
+	} from '$lib/stores/match/index.svelte';
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
+	import { page as appPage } from '$app/state';
 
-	const pages = ['Scouter', 'Auto', 'Tele', 'Final', 'Upload'] as const;
+	const pages = ['Scouter', 'Auto', 'Tele', 'Final', 'Save'] as const;
 
 	let page = $state(0);
+	let editMatchId = $state<string | null>(null);
 
 	let menuOpen = $state(false);
 
@@ -43,17 +52,39 @@
 		menuOpen = !menuOpen;
 	}
 
-	async function submitForm() {
-		await addToOffline();
+	async function saveNewForm() {
+		if (editMatchId) {
+			await updateSavedMatch(editMatchId, $state.snapshot(form));
+			clearScoutingForm();
+			await goto(resolve('/scouting/offline'));
+			return;
+		}
+
 		page = 0;
 		clearScoutingForm();
 	}
 
-	async function addToOffline() {
-		await saveDraftAsFinal(form.match.matchNumber);
-	}
-
 	onMount(() => {
+		void (async () => {
+			const id = appPage.url.searchParams.get('id');
+
+			if (!id) {
+				await goto(resolve('/scouting/offline'));
+				return;
+			}
+
+			editMatchId = id;
+
+			const savedMatch = await getSavedMatch(id);
+
+			if (!savedMatch) {
+				await goto(resolve('/scouting/offline'));
+				return;
+			}
+
+			setScoutingForm(savedMatch.data);
+		})();
+
 		const handleOutsideClick = (event: MouseEvent) => {
 			if (!menuElement) return;
 
@@ -68,6 +99,7 @@
 			document.removeEventListener('click', handleOutsideClick);
 		};
 	});
+
 </script>
 
 <svelte:head>
@@ -144,7 +176,6 @@
 
 			<NumberInput bind:state={form.auto.fuelFromNZ}>Fuel Collected from NZ</NumberInput>
 
-
 			<Checkbox bind:state={form.auto.climbedInAuto}>Climbed in Auto</Checkbox>
 
 			<br />
@@ -164,7 +195,7 @@
 				step={1}
 				size="md"
 				label="Auto Strength-of-Shooter"
-			/> <br>
+			/> <br />
 		{:else if page === 2}
 			<h3>Teleoperated</h3>
 
@@ -264,16 +295,11 @@
 		{:else if page === 4}
 			<!-- Upload section -->
 
-			<h3>Upload Match</h3>
+			<h3>Save Edits</h3>
 
-			<p>Upload Match! Please double check all data uploaded in the offline storage menu.</p>
+			<p>Save your edits, please make sure all edits are correct</p>
 
-			<Button onclick={submitForm} variant="primary">Upload!</Button>
-			<p>
-				Use me to add to offline forms.<br />E.g. when WiFi is unreliable, or you know you made a
-				mistake and need to correct it after your shift
-			</p>
-			<Button onclick={addToOffline} variant="danger">Add to Offline</Button>
+			<Button onclick={saveNewForm} variant="primary">Save</Button>
 		{/if}
 	</div>
 </div>
@@ -281,6 +307,9 @@
 <div class="nav">
 	<div class="nav-side">
 		<Button onclick={previousPage} size="lg">Back</Button>
+	</div>
+	<div class="nav-side">
+		<Button onclick={() => {goto(resolve("/scouting/offline"))}} variant="danger" size="lg">Cancel</Button>
 	</div>
 
 	<div class="current-page" bind:this={menuElement}>
@@ -301,6 +330,9 @@
 		{/if}
 	</div>
 
+	<div class="nav-side">
+		<Button onclick={saveNewForm} variant="primary" size="lg">Save</Button>
+	</div>
 	<div class="nav-side">
 		<Button onclick={nextPage} size="lg">Next</Button>
 	</div>

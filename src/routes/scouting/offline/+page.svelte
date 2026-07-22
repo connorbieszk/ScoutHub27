@@ -1,12 +1,24 @@
 <script lang="ts">
+	import { afterNavigate, goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
+	import { onMount } from 'svelte';
 	import Button from '$lib/components/forms/Button.svelte';
 	import { getPendingUploads, deleteSavedMatch } from '$lib/stores/match/index.svelte';
 	import type { SavedMatch } from '$lib/stores/match/index.svelte';
 	import { slide } from 'svelte/transition';
 
 	let uploadedData = $state<SavedMatch[] | null>(null);
-	getPendingUploads().then((data: SavedMatch[]) => {
-		uploadedData = $state.snapshot(data);
+
+	async function refreshUploads() {
+		uploadedData = $state.snapshot(await getPendingUploads());
+	}
+
+	onMount(() => {
+		void refreshUploads();
+
+		return afterNavigate(() => {
+			void refreshUploads();
+		});
 	});
 
 	let confirmDeleteId = $state<string | null>(null);
@@ -32,6 +44,14 @@
 		}
 
 		confirmDeleteId = null;
+	}
+
+	function editForm(id: string) {
+		goto(resolve(`/scouting/offline/edit?id=${encodeURIComponent(id)}`));
+	}
+
+	function uploadForm(id: string) {
+		
 	}
 
 	function toggleDeleteConfirmation(id: string) {
@@ -75,8 +95,8 @@
 					<Button size="md" variant="danger" onclick={() => toggleDeleteConfirmation(data.id)}>
 						Delete
 					</Button>
-					<Button size="md">Edit</Button>
-					<Button size="md" variant="primary">Upload</Button>
+					<Button size="md" onclick={() => editForm(data.id)}>Edit</Button>
+					<Button size="md" onclick={() => uploadForm(data.id)} variant="primary">Upload</Button>
 				</div>
 			</div>
 			{#if confirmDeleteId === data.id}

@@ -167,6 +167,7 @@ export async function updateSavedMatch(
 	if (index === -1) return;
 
 	saved[index].data = structuredClone(updatedData);
+	saved[index].matchNumber = updatedData.match.matchNumber;
 
 	await localforage.setItem('PendingUploads', saved);
 }
@@ -180,26 +181,15 @@ export async function getSavedMatch(id: string) {
 	return saved.find(match => match.id === id) ?? null;
 }
 
+export function setScoutingForm(data: typeof defaultForm) {
+	Object.assign(form.match, data.match);
+	Object.assign(form.auto, data.auto);
+	Object.assign(form.tele, data.tele);
+	Object.assign(form.final, data.final);
+}
+
 export function clearScoutingForm() {
-	Object.assign(
-		form.match,
-		defaultForm.match
-	);
-
-	Object.assign(
-		form.auto,
-		defaultForm.auto
-	);
-
-	Object.assign(
-		form.tele,
-		defaultForm.tele
-	);
-
-	Object.assign(
-		form.final,
-		defaultForm.final
-	);
+	setScoutingForm(defaultForm);
 
 	if (browser) {
 		localforage.removeItem(STORAGE_KEY);

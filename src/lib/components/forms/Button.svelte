@@ -141,7 +141,8 @@
 	}
 
 	.primary:hover {
-		border-color: white;
+		color: var(--foreground-2);
+		border-color: var(--foreground-2);
 	}
 
 	.danger {
@@ -151,6 +152,7 @@
 	}
 
 	.danger:hover {
-		border-color: white;
+		color: var(--foreground-2);
+		border-color: var(--foreground-2);
 	}
 </style>
