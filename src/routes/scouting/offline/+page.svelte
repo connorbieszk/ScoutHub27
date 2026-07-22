@@ -58,21 +58,9 @@
 	{#each uploadedData as data, index (index)}
 		<div
 			class="data"
-			style="
-				box-shadow:
-		0 2px 8px rgba(0, 0, 0, 0.25),
-
-		/* Accent glow */
-		0 12px 12px -8px color-mix(in srgb, var({!data.data.match.teamAlliance
+			style="background-color: color-mix(in srgb, var({!data.data.match.teamAlliance
 				? '--red'
-				: '--blue'}) 55%, transparent),
-		0 24px 24px -16px color-mix(in srgb, var({!data.data.match.teamAlliance
-				? '--red'
-				: '--blue'}) 40%, transparent),
-		0 36px 36px -24px color-mix(in srgb, var({!data.data.match.teamAlliance
-				? '--red'
-				: '--blue'}) 25%, transparent);
-		"
+				: '--blue'}) 10%, var(--background-2) 90%)"
 		>
 			<div class="large-text">
 				<h2>Match Number: {data.matchNumber == '' ? 'Missing!' : data.matchNumber}</h2>
