@@ -9,7 +9,7 @@
 	import TextInput from '$lib/components/forms/TextInput.svelte';
 
 	import { usersList } from '$lib/config';
-	import { getScoutingForm, clearScoutingForm, saveDraftAsFinal } from '$lib/stores/scouting/index.svelte';
+	import { getScoutingForm, clearScoutingForm, saveDraftAsFinal } from '$lib/stores/match/index.svelte';
 
 	const pages = ['Scouter', 'Auto', 'Tele', 'Final', 'Upload'] as const;
 

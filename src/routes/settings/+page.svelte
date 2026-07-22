@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	import Button from '$lib/components/forms/Button.svelte';
 	import { Themes, setTheme } from '$lib/themes';
 
@@ -90,10 +92,7 @@
 		}
 	}
 
-	// Force a true reload
-	window.location.replace(
-		`${window.location.pathname}?reset=${Date.now()}`
-	);
+	goto(resolve("/"));
 }
 </script>
 

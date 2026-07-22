@@ -54,6 +54,23 @@ const form = $state(
 	structuredClone(defaultForm)
 );
 
+export async function deleteSavedMatch(id: string) {
+	if (!browser) return false;
+
+	const saved =
+		await localforage.getItem<SavedMatch[]>('PendingUploads') ?? [];
+
+	const filtered = saved.filter(match => match.id !== id);
+
+	// Nothing was deleted
+	if (filtered.length === saved.length) {
+		return false;
+	}
+
+	await localforage.setItem('PendingUploads', filtered);
+
+	return true;
+}
 
 async function loadForm() {
 	if (!browser) return;
