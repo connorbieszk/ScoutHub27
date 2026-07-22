@@ -99,6 +99,69 @@ export function getScoutingForm() {
 	return form;
 }
 
+export interface SavedMatch {
+	id: string;
+	status: 'pending' | 'uploaded' | 'failed';
+	createdAt: number;
+	matchNumber: string;
+	data: typeof defaultForm;
+}
+
+export async function saveDraftAsFinal(matchNumber: string) {
+	if (!browser) return;
+
+	const saved =
+		await localforage.getItem<SavedMatch[]>('PendingUploads') ?? [];
+
+	const entry: SavedMatch = {
+		id: crypto.randomUUID(),
+		status: 'pending',
+		createdAt: Date.now(),
+		matchNumber,
+		data: $state.snapshot(form)
+	};
+
+	saved.push(entry);
+
+	await localforage.setItem('PendingUploads', saved);
+
+	return entry.id;
+}
+
+export async function getPendingUploads() {
+	if (!browser) return [];
+
+	return (
+		await localforage.getItem<SavedMatch[]>('PendingUploads')
+	) ?? [];
+}
+
+export async function updateSavedMatch(
+	id: string,
+	updatedData: typeof defaultForm
+) {
+	if (!browser) return;
+
+	const saved =
+		await localforage.getItem<SavedMatch[]>('PendingUploads') ?? [];
+
+	const index = saved.findIndex(match => match.id === id);
+
+	if (index === -1) return;
+
+	saved[index].data = structuredClone(updatedData);
+
+	await localforage.setItem('PendingUploads', saved);
+}
+
+export async function getSavedMatch(id: string) {
+	if (!browser) return null;
+
+	const saved =
+		await localforage.getItem<SavedMatch[]>('PendingUploads') ?? [];
+
+	return saved.find(match => match.id === id) ?? null;
+}
 
 export function clearScoutingForm() {
 	Object.assign(

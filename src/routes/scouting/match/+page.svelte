@@ -9,7 +9,7 @@
 	import TextInput from '$lib/components/forms/TextInput.svelte';
 
 	import { usersList } from '$lib/config';
-	import { getScoutingForm, clearScoutingForm } from '$lib/stores/scouting/index.svelte';
+	import { getScoutingForm, clearScoutingForm, saveDraftAsFinal } from '$lib/stores/scouting/index.svelte';
 
 	const pages = ['Scouter', 'Auto', 'Tele', 'Final', 'Upload'] as const;
 
@@ -42,13 +42,14 @@
 		menuOpen = !menuOpen;
 	}
 
-	function submitForm() {
-		addToOffline();
-	}
-
-	function addToOffline() {
+	async function submitForm() {
+		await addToOffline();
 		page = 0;
 		clearScoutingForm();
+	}
+
+	async function addToOffline() {
+		await saveDraftAsFinal(form.match.matchNumber);
 	}
 
 	onMount(() => {
