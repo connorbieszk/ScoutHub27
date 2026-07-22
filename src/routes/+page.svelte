@@ -26,7 +26,7 @@
 {#if onboarded === null}
 	<div class="content">
 		<div class="title">
-			<h1>HexScout BIOCORE</h1>
+			<h1>HexScouter BioCore</h1>
 			<h2>
 				The site is still loading. Please wait a moment.
 			</h2>
@@ -35,7 +35,7 @@
 {:else if onboarded}
 	<div class="content">
 		<div class="title">
-			<h1>HexScout BIOCORE</h1>
+			<h1>HexScouter BioCore</h1>
 			<h2>
 				Welcome to the 2027 scouting app.<br />
 				Choose where you would like to go.
@@ -52,7 +52,7 @@
 {:else}
 	<div class="content">
 		<div class="title">
-			<h1>HexScout BIOCORE</h1>
+			<h1>HexScouter BioCore</h1>
 			<h2>
 				Welcome Scouter! <br /> 
 				Please select an option to setup your scouting experience!

@@ -65,11 +65,9 @@
 			{#if menuOpen}
 				<div class="route-menu" in:slide={{ duration: 150 }} out:slide={{ duration: 100 }}>
 					{#each links as link (link.href)}
-						{#if link.href !== currentPath}
-							<Button onclick={() => navigate(link.href)} size="lg">
-								{link.label}
-							</Button>
-						{/if}
+						<Button onclick={() => navigate(link.href)} size="lg">
+							{link.label}
+						</Button>
 					{/each}
 				</div>
 			{/if}
@@ -123,48 +121,48 @@
 	}
 
 	/* Center page selector */
-.route-selector {
-	display: flex;
-	align-items: center;
-	justify-content: flex-end;
+	.route-selector {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
 
-	margin-left: auto;
-}
+		margin-left: auto;
+	}
 
-.route-dropdown {
-	position: relative;
-	display: flex;
+	.route-dropdown {
+		position: relative;
+		display: flex;
 		right: 0.5rem;
 
-	align-items: center;
-}
+		align-items: center;
+	}
 
-.route-menu {
-	position: absolute;
+	.route-menu {
+		position: absolute;
 
-	top: calc(100% + 0.5rem);
-	right: -.25rem;
+		top: calc(100% + 0.5rem);
+		right: -0.25rem;
 
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
 
-	padding: 0.5rem;
-	padding-right: 1rem;
+		padding: 0.5rem;
+		padding-right: 1rem;
 
-	background-color: var(--background-2);
-	border: 1px solid var(--background-4);
-	border-radius: var(--default-border-radius);
+		background-color: var(--background-2);
+		border: 1px solid var(--background-4);
+		border-radius: var(--default-border-radius);
 
-	z-index: 100;
-}
+		z-index: 100;
+	}
 
-.route-menu :global(button),
-.route-menu :global(a) {
-	width: 100%;
-	white-space: nowrap;
-	justify-content: center;
-}
+	.route-menu :global(button),
+	.route-menu :global(a) {
+		width: 100%;
+		white-space: nowrap;
+		justify-content: center;
+	}
 
 	/* Mobile adjustments */
 	@media (max-width: 700px) {
