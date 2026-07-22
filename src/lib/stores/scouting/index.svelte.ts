@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import localforage from "localforage";
 
-const STORAGE_KEY = 'match-scouting-form-v1';
+const STORAGE_KEY = 'matchScoutingFormDraft';
 
 export const defaultForm = {
 	match: {
@@ -20,9 +20,33 @@ export const defaultForm = {
 		autoSOS: 0
 	},
 
-	tele: {},
+	tele: {
+		shotsMade : 0,
+		fuelPushed : 0,
+		fuelPassed : 0,
 
-	final: {}
+		playedDefense : false,
+		defenseQuality : 0,
+		trenchBump: false,
+		allianceZone : false,
+		neutralZone : false,
+
+		commitedFouls : false,
+		defendability: 0,
+		shooterRange : 0
+	},
+
+	final: {
+		lostComms : false,
+		brokeDown : false,
+		climbed : false,
+		driverSkill : 0,
+		throughputSpeed : 0,
+		intakeRating : 0,
+		driverComments : "",
+		robotComments : "",
+		otherComments : ""
+	}
 };
 
 
