@@ -12,6 +12,15 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+	interface Navigator {
+		storageBuckets?: StorageBucketsManager;
+	}
+
+	interface StorageBucketsManager {
+		keys(): Promise<string[]>;
+		delete(name: string): Promise<void>;
+	}
 }
+
 
 export {};

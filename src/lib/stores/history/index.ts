@@ -1,15 +1,16 @@
 import type { RouteId } from "$app/types";
 import { browser } from "$app/environment";
+import localforage from "localforage";
 
 let internalHistory: RouteId[] = [];
 
-export function pullStoredHistory() {
+export async function pullStoredHistory() {
 	if (!browser) return;
 
-	const stored = localStorage.getItem("internalHistory");
+	const stored = await localforage.getItem<string>("internalHistory");
 
-	if (!stored) {
-		localStorage.setItem("internalHistory", JSON.stringify(internalHistory));
+	if (stored === null) {
+		localforage.setItem("internalHistory", JSON.stringify(internalHistory));
 		return;
 	}
 
@@ -17,7 +18,7 @@ export function pullStoredHistory() {
 		internalHistory = JSON.parse(stored) as RouteId[];
 	} catch {
 		internalHistory = [];
-		localStorage.setItem("internalHistory", JSON.stringify(internalHistory));
+		localforage.setItem("internalHistory", JSON.stringify(internalHistory));
 	}
 }
 
@@ -30,7 +31,7 @@ export function setHistory(items: RouteId[]) {
 
 	internalHistory = items;
 
-	localStorage.setItem(
+	localforage.setItem(
 		"internalHistory",
 		JSON.stringify(internalHistory)
 	);
@@ -45,7 +46,7 @@ export function popHistory(): RouteId | undefined {
 
 	internalHistory = internalHistory.slice(0, -1);
 
-	localStorage.setItem(
+	localforage.setItem(
 		"internalHistory",
 		JSON.stringify(internalHistory)
 	);
@@ -60,7 +61,7 @@ export function addHistory(item: RouteId) {
 
 	internalHistory.push(item);
 
-	localStorage.setItem(
+	localforage.setItem(
 		"internalHistory",
 		JSON.stringify(internalHistory)
 	);
@@ -70,5 +71,5 @@ export function clearHistory() {
 	if (!browser) return;
 
 	internalHistory = [];
-	localStorage.removeItem("internalHistory");
+	localforage.removeItem("internalHistory");
 }
