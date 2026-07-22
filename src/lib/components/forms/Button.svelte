@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from '$app/paths';
+	import type { RouteId } from '$app/types';
 	import type { Snippet } from 'svelte';
 
 	let {
@@ -11,7 +12,7 @@
 		size = 'lg',
 		class: className = undefined
 	}: {
-		href?: string;
+		href?: RouteId;
 		onclick?: () => void;
 		children: Snippet;
 		variant?: 'default' | 'primary' | 'danger';
@@ -23,42 +24,49 @@
 	const sizeStyles = {
 		sm: {
 			fontSize: '0.95rem',
-			padding: '0.4rem 0.7rem',
+			paddingY: '0.4rem',
+			paddingX: '0.7rem',
 			minHeight: '1.8rem'
 		},
 		md: {
 			fontSize: '1.1rem',
-			padding: '0.55rem 0.85rem',
+			paddingY: '0.55rem',
+			paddingX: '0.85rem',
 			minHeight: '2.25rem'
 		},
 		lg: {
 			fontSize: '1.3rem',
-			padding: '0.7rem 1rem',
+			paddingY: '0.7rem',
+			paddingX: '1rem',
 			minHeight: '2.75rem'
 		}
 	} as const;
 
 	const currentSize = $derived(sizeStyles[size]);
-	const resolvedHref = $derived(
-		href ? (resolve as unknown as (value: string) => string)(href) : undefined
-	);
+
+	const style = $derived(`
+		--button-font-size: ${currentSize.fontSize};
+		--button-padding-y: ${currentSize.paddingY};
+		--button-padding-x: ${currentSize.paddingX};
+		--button-min-height: ${currentSize.minHeight};
+	`);
 </script>
 
 {#if href}
 	<a
 		class={[variant, className].filter(Boolean).join(' ')}
-		style={`--button-font-size: ${currentSize.fontSize}; --button-padding: ${currentSize.padding}; --button-min-height: ${currentSize.minHeight}`}
-		href={resolvedHref}
-		{onclick}
+		style={style}
+		href={resolve(href)}
+		onclick={onclick}
 	>
 		{@render children()}
 	</a>
 {:else}
 	<button
 		class={[variant, className].filter(Boolean).join(' ')}
-		style={`--button-font-size: ${currentSize.fontSize}; --button-padding: ${currentSize.padding}; --button-min-height: ${currentSize.minHeight}`}
-		{type}
-		{onclick}
+		style={style}
+		type={type}
+		onclick={onclick}
 	>
 		{@render children()}
 	</button>
@@ -76,12 +84,11 @@
 		font-weight: 600;
 		touch-action: manipulation;
 
-		padding: var(--button-padding);
+		padding: var(--button-padding-y) var(--button-padding-x);
 		min-height: var(--button-min-height);
 		margin: var(--default-margin);
 
 		text-decoration: none;
-
 		color: var(--foreground-2);
 
 		background-color: var(--background-2);
@@ -104,13 +111,26 @@
 		border-color: var(--foreground-2);
 	}
 
+	a:active,
+	button:active {
+		transform: translateY(0);
+	}
+
+	a:disabled,
+	button:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+		transform: none;
+	}
+
 	@media (max-width: 700px) {
 		a,
 		button {
-			min-height: 2.5rem; /* 40px */
-			max-height: 2.5rem;
-			padding: 0.45rem 0.7rem;
-			font-size: 0.95rem;
+			font-size: calc(var(--button-font-size) * 0.9);
+			padding:
+				calc(var(--button-padding-y) * 0.9)
+				calc(var(--button-padding-x) * 0.9);
+			min-height: max(2.5rem, var(--button-min-height));
 		}
 	}
 
@@ -120,9 +140,17 @@
 		border-color: var(--green);
 	}
 
+	.primary:hover {
+		border-color: white;
+	}
+
 	.danger {
 		background-color: var(--red);
 		color: white;
 		border-color: var(--red);
+	}
+
+	.danger:hover {
+		border-color: white;
 	}
 </style>

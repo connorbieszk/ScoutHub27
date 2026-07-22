@@ -4,6 +4,7 @@
 	import Checkbox from '$lib/components/forms/Checkbox.svelte';
 	import Dropdown from '$lib/components/forms/Dropdown.svelte';
 	import TextInput from '$lib/components/forms/TextInput.svelte';
+	import { usersList } from '$lib/config';
 
 	let page = $state(0);
 	let menuOpen = $state(false);
@@ -61,11 +62,7 @@
 				label="Scouter Name"
 				value={scouterName}
 				placeholder="Scouter Name"
-				options={[
-					{ label: 'Tim Cheese', value: 'timcheese' },
-					{ label: 'Jane Doe', value: 'janedoe' },
-					{ label: 'John Doe', value: 'johndoe' } // When the database is up , host a users database, with Pretty Names and database names (Label and Value)
-				]}
+				options={usersList}
 			/>
 			<br />
 			<TextInput

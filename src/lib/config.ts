@@ -1,0 +1,29 @@
+export const usersList = [
+    { label: 'Beau G', value: 'beaug' },
+    { label: 'Ben A', value: 'bena' },
+    { label: 'Brayden W', value: 'braydenw' },
+    { label: 'Caden H', value: 'cadenh' },
+    { label: 'Camila AC', value: 'camilaac' },
+    { label: 'Charlie R', value: 'chariler' },
+    { label: 'Charlie Y', value: 'chariley' },
+    { label: 'Connor B', value: 'connorb' },
+    { label: 'Elizabeth T', value: 'elizabetht' },
+    { label: 'Henry M', value: 'henrym' },
+    { label: 'Ivan J', value: 'ivanj' },
+    { label: 'James J', value: 'jamesj' },
+    { label: 'Kipton L', value: 'kiptonl' },
+    { label: 'Lillian B', value: 'lillianb' },
+    { label: 'Lukas B', value: 'lukasb' },
+    { label: 'Luke D', value: 'luked' },
+    { label: 'Malcolm R', value: 'malcolmr' },
+    { label: 'Mason H', value: 'masonh' },
+    { label: 'Moira D', value: 'moirad' },
+    { label: 'Nathan K', value: 'nathank' },
+    { label: 'Nolan S', value: 'nolans' },
+    { label: 'Sam W', value: 'samw' },
+    { label: 'Sully O', value: 'sullyo' },
+    { label: 'Tyler P', value: 'tylerp' },
+    { label: 'Xavier N', value: 'xaviern' }
+];
+export const robotsList = [];
+export const scoutingList = [];
