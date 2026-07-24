@@ -1,5 +1,3 @@
-import { type MatchData } from "./matchData";
-
 export class UploadedMatch {
 	id: string;
     devId: string;
@@ -10,7 +8,7 @@ export class UploadedMatch {
 	matchNumber : number;
 	teamNumber: number;
 	scouter: string;
-	data: MatchData;
+	data: {};
 
 	constructor(
 		id: string,
@@ -22,7 +20,7 @@ export class UploadedMatch {
 		matchNumber: number,
 		teamNumber: number,
 		scouter: string,
-		data: MatchData
+		data: {}
 	) {
 		this.id = id;
         this.devId = devId;
