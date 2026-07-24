@@ -1,4 +1,4 @@
-import { MatchData } from "./MatchData";
+import { type MatchData } from "./MatchData";
 
 export class UploadedMatch {
 	id: string;
