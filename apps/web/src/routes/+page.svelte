@@ -21,21 +21,6 @@
 		localStorage.setItem('Onboarded', 'true');
 		onboarded = true;
 	}
-
-	const DEVICE_KEY = 'deviceId';
-
-	export function getDeviceId() {
-		let id = localStorage.getItem(DEVICE_KEY);
-
-		if (!id) {
-			id = crypto.randomUUID();
-			localStorage.setItem(DEVICE_KEY, id);
-		}
-
-		return id;
-	}
-
-	console.log("Device ID Set: " + getDeviceId())
 </script>
 
 {#if onboarded === null}

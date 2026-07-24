@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import Button from '$lib/components/forms/Button.svelte';
+	import { deviceID } from '$lib/deviceID.svelte';
 	import { Themes, setTheme } from '$lib/themes';
 
 	var confirm: boolean = $state(false);
@@ -148,11 +149,16 @@
 		>{confirm ? 'Confirm?' : 'Wipe Site Data'}</Button
 	>
 	<br />
+	<br>
+	<p>
+	Device ID: {deviceID.id}
+	</p>
+	<br>
 	<div class="title">
 		<h2>Menus</h2>
 	</div>
 	<Button href="/admin">Admin Menu</Button>
-	<Button href="/debug">Testing Menu</Button>
+	<Button href="/testing">Testing Menu</Button>
 </div>
 
 <style>

@@ -9,6 +9,7 @@
 	import { addHistory, pullStoredHistory } from '$lib/stores/history';
 	import { page } from '$app/state';
 
+
 	let { children } = $props();
 
 	onMount(() => {
