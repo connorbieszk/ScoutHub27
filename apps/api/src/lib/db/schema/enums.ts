@@ -12,6 +12,8 @@ export const formType = pgEnum(
     "form_type",
     [
         "match",
+        "pre",
+        "practice",
         "pit"
     ]
 );

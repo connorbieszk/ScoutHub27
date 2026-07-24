@@ -60,7 +60,7 @@ export async function saveDraftAsFinal() {
 	const entry: UploadedMatch = {
 		id: crypto.randomUUID(),
 		devId: deviceID.id,
-		status: "pending",
+		status: "uploaded",
 		type: "match",
 		createdAt: Date.now(),
 		competition: currentCompetiton,

@@ -1,7 +1,7 @@
 export class UploadedMatch {
 	id: string;
     devId: string;
-	status: "pending" | "uploaded" | "failed";
+	status: "uploaded" | "failed";
     type: "match" | "practice" | "pre" | "pit";
 	createdAt: number;
 	competition : string;
@@ -13,7 +13,7 @@ export class UploadedMatch {
 	constructor(
 		id: string,
         devId : string,
-		status: "pending" | "uploaded" | "failed",
+		status: "uploaded" | "failed",
         type: "match" | "practice" | "pre" | "pit",
 		createdAt: number,
 		competition : string,
