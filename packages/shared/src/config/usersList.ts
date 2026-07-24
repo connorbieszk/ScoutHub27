@@ -1,4 +1,4 @@
-export const UserList = [
+export const UsersList = [
     { label: 'Beau G', value: 'beaug' },
     { label: 'Ben A', value: 'bena' },
     { label: 'Brayden W', value: 'braydenw' },

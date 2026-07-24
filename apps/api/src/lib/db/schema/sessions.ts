@@ -8,6 +8,8 @@ import { memberTypes } from "./enums";
 
 export const sessions = pgTable("sessions", {
 	id: uuid("id").primaryKey(),
+    
+    devId: uuid("device_id").notNull(),
 
 	role: memberTypes("role")
 		.notNull(),

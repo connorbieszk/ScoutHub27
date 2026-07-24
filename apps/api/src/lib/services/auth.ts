@@ -2,44 +2,63 @@ import argon2 from "argon2";
 import { env } from "$env/dynamic/private";
 import { db } from "$lib/db";
 import { sessions } from "$lib/db/schema";
-import { eq, gt, and } from "drizzle-orm";
+import { eq, gt } from "drizzle-orm";
 import { addDays } from "date-fns";
-
-
-export const authRoles = [
-	"admin",
-	"strat_team",
-    "hexhound"
-] as const;
-
-export type AuthRole = typeof authRoles[number];
-
+import crypto from "crypto";
+import { AuthRoles, type AuthRole} from "@scouthub27/shared";
 
 export interface Session {
 	id: string;
+	devId: string;
 	createdAt: Date;
 	role: AuthRole;
 	expiresAt: Date;
 }
 
+function requireEnv(name: keyof typeof env): string {
+	const value = env[name];
 
-const passwords = {
-	admin: env.ADMIN_PASS_HASH!,
-	strat_team: env.STRAT_PASS_HASH!,
-    hexhound: ""
+	if (!value) {
+		throw new Error(`Missing environment variable: ${name}`);
+	}
+
+	return value;
+}
+
+const passwords: Partial<Record<AuthRole, string>> = {
+	admin: requireEnv("ADMIN_PASS_HASH"),
+	strat_team: requireEnv("STRAT_PASS_HASH"),
+	hexhound: undefined
 };
 
 
 export async function authenticateUser(
 	role: AuthRole,
-	password: string
-): Promise<Session | null> {
+	password: string,
+	devId: string
+): Promise<{ session: Session; token: string } | null> {
+
+	if (!AuthRoles.includes(role)) {
+		return null;
+	}
+
+	if (role === "hexhound") {
+		const token = await createSession(role, devId);
+
+		const session = await getSession(token);
+
+		if (!session) {
+			return null;
+		}
+
+		return {
+			session,
+			token
+		};
+	}
+
 
 	const hash = passwords[role];
-
-    if (role == "hexhound") {
-        return null;
-    }
 
 	if (!hash) {
 		return null;
@@ -54,20 +73,32 @@ export async function authenticateUser(
 		return null;
 	}
 
-	const sessionId = await createSession(role);
+	const token = await createSession(role, devId);
 
-	return await getSession(sessionId);
+	const session = await getSession(token);
+
+	if (!session) {
+		return null;
+	}
+
+	return {
+		session,
+		token
+	};
 }
 
-
-export async function createSession(
-	role: AuthRole
+async function createSession(
+	role: AuthRole,
+	devId: string
 ): Promise<string> {
 
-	const id = crypto.randomUUID();
+	const token = crypto.randomBytes(32).toString("hex");
+
+	const tokenHash = await argon2.hash(token);
 
 	await db.insert(sessions).values({
-		id,
+		id: tokenHash,
+		devId,
 		role,
 		expiresAt: addDays(
 			new Date(),
@@ -75,35 +106,79 @@ export async function createSession(
 		)
 	});
 
-	return id;
+	return token;
 }
 
-
 export async function getSession(
-	id: string
+	token: string
 ): Promise<Session | null> {
 
-	const session = await db.query.sessions.findFirst({
-		where: and(
-			eq(sessions.id, id),
-			gt(
-				sessions.expiresAt,
-				new Date()
-			)
+	const possibleSessions = await db.query.sessions.findMany({
+		where: gt(
+			sessions.expiresAt,
+			new Date()
 		)
 	});
 
-	if (!session) {
-		return null;
+	for (const session of possibleSessions) {
+
+		const valid = await argon2.verify(
+			session.id,
+			token
+		);
+
+		if (valid) {
+
+			await db.update(sessions)
+				.set({
+					expiresAt: addDays(
+						new Date(),
+						2
+					)
+				})
+				.where(
+					eq(
+						sessions.id,
+						session.id
+					)
+				);
+
+
+			return {
+				id: session.id,
+				devId: session.devId,
+				createdAt: session.createdAt,
+				role: session.role as AuthRole,
+				expiresAt: session.expiresAt
+			};
+		}
 	}
 
-	return session;
+	return null;
 }
 
-
 export async function deleteSession(
-	id: string
+	token: string
 ) {
-	await db.delete(sessions)
-		.where(eq(sessions.id, id));
+	const possibleSessions = await db.query.sessions.findMany();
+
+	for (const session of possibleSessions) {
+
+		if (
+			await argon2.verify(
+				session.id,
+				token
+			)
+		) {
+			await db.delete(sessions)
+				.where(
+					eq(
+						sessions.id,
+						session.id
+					)
+				);
+
+			return;
+		}
+	}
 }

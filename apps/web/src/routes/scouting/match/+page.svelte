@@ -8,8 +8,9 @@
 	import Slider from '$lib/components/forms/Slider.svelte';
 	import TextInput from '$lib/components/forms/TextInput.svelte';
 
-	import { UserList } from '@scouthub27/shared';
+	import { UsersList } from '@scouthub27/shared';
 	import { getScoutingForm, clearScoutingForm, saveDraftAsFinal, setupScoutingForm, loadForm } from '$lib/stores/match/index.svelte';
+	import TextStyleNumberInput from '$lib/components/forms/TextStyleNumberInput.svelte';
 	
 
 	const pages = ['Scouter', 'Auto', 'Tele', 'Final', 'Upload'] as const;
@@ -95,25 +96,21 @@
 				label="Scouter Name"
 				bind:value={form.match.scouterName}
 				placeholder="Scouter Name"
-				options={UserList}
+				options={UsersList}
 			/>
 
 			<br />
 
-			<TextInput
+			<TextStyleNumberInput
 				bind:value={form.match.matchNumber}
-				type="input"
-				placeholder="Match Number"
 				size="sm"
 				label="Match Number"
 			/>
 
 			<br />
 
-			<TextInput
+			<TextStyleNumberInput
 				bind:value={form.match.teamNumber}
-				type="input"
-				placeholder="Team Number"
 				size="sm"
 				label="Team Number"
 			/>

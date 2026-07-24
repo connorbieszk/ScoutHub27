@@ -1,6 +1,7 @@
 import { browser } from "$app/environment";
 import localforage from "localforage";
-import { type MatchData, createMatchData, UploadedMatch } from "@scouthub27/shared";
+import { type MatchData, createMatchData, currentCompetiton, UploadedMatch } from "@scouthub27/shared";
+import { deviceID } from "$lib/deviceID.svelte";
 
 const STORAGE_KEY = "matchScoutingFormDraft";
 const PENDING_KEY = "PendingUploads";
@@ -58,9 +59,14 @@ export async function saveDraftAsFinal() {
 
 	const entry: UploadedMatch = {
 		id: crypto.randomUUID(),
+		devId: deviceID.id,
 		status: "pending",
+		type: "match",
 		createdAt: Date.now(),
+		competition: currentCompetiton,
+		teamNumber: form.match.teamNumber,
 		matchNumber: form.match.matchNumber,
+		scouter: form.match.scouterName,
 		data: cloneForm(form)
 	};
 

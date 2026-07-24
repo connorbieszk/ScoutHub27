@@ -84,8 +84,8 @@
 				: '--blue'}) 10%, var(--background-2) 90%)"
 		>
 			<div class="large-text">
-				<h2>Match Number: {data.matchNumber == '' ? 'Missing!' : data.matchNumber}</h2>
-				<h3>Team: {data.data.match.teamNumber == '' ? 'Missing!' : data.data.match.teamNumber}</h3>
+				<h2>Match Number: {data.matchNumber == null ? 'Missing!' : data.matchNumber}</h2>
+				<h3>Team: {data.data.match.teamNumber == null ? 'Missing!' : data.data.match.teamNumber}</h3>
 			</div>
 			<div class="bottom-container">
 				<div class="small-text">

@@ -1,8 +1,8 @@
 export interface MatchData {
 	match: {
 		scouterName: string;
-		matchNumber: string;
-		teamNumber: string;
+		matchNumber: number;
+		teamNumber: number;
 		teamAlliance: boolean;
 	};
 
@@ -48,8 +48,8 @@ export function createMatchData(data: Partial<MatchData> = {}): MatchData {
 	return {
 		match: {
 			scouterName: "",
-			matchNumber: "",
-			teamNumber: "",
+			matchNumber: 0,
+			teamNumber: 0,
 			teamAlliance: false,
 			...data.match
 		},

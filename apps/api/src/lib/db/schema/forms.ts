@@ -1,16 +1,17 @@
 import { pgTable, uuid, integer, timestamp, text, jsonb } from "drizzle-orm/pg-core";
-import { type MatchData } from "@scouthub27/shared";
+import { UploadedMatch } from "@scouthub27/shared";
 import { formStatus, formType } from "./enums";
-
-
 
 export const forms = pgTable("forms", {
     id: uuid("id").primaryKey(),
-    type: formType("type").notNull(),
-    teamNumber: integer("team_number").notNull(),
+    devId: uuid("dev_id").notNull(),
     status: formStatus("status").default("uploaded").notNull(),
-    scouter: text("scouter").notNull(),
+    type: formType("type").notNull(),
     createdAt: timestamp("created_at")
         .defaultNow().notNull(),
-    data: jsonb("data").notNull().$type<MatchData>()
+    competition: text("competition").notNull(),
+    matchNumber: integer("team_number").notNull(),
+    teamNumber: integer("team_number").notNull(),
+    scouter: text("scouter").notNull(),
+    data: jsonb("data").notNull().$type<UploadedMatch>()
 });
