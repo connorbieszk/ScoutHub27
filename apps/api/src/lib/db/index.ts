@@ -5,7 +5,7 @@ import * as schema from "./schema";
 
 import { env } from "$env/dynamic/private";
 
-const client = postgres(env.DB_URL);
+const client = postgres(env.DATABASE_URL);
 
 export const db = drizzle(client, {
 	schema

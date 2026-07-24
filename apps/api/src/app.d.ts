@@ -2,6 +2,9 @@
 // for information about these interfaces
 declare global {
 	namespace App {
+		interface Locals {
+			session: typeof import("$lib/db/schema").sessions.$inferSelect | null;
+		}
 		// interface Error {}
 		// interface Locals {}
 		// interface PageData {}

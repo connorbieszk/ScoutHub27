@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import type { Session } from "$lib/services/auth";
+import type { Session } from "$lib/server/auth";
 import type { Permission } from "@scouthub27/shared";
 import { can } from "@scouthub27/shared";
 
