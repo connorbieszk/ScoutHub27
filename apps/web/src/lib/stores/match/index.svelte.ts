@@ -1,195 +1,156 @@
 import { browser } from "$app/environment";
 import localforage from "localforage";
+import { MatchData, type UploadedMatch } from "@scouthub27/shared";
 
-const STORAGE_KEY = 'matchScoutingFormDraft';
+const STORAGE_KEY = "matchScoutingFormDraft";
+const PENDING_KEY = "PendingUploads";
 
-export const defaultForm = {
-	match: {
-		scouterName: '',
-		matchNumber: '',
-		teamNumber: '',
-		teamAlliance: false
-	},
+const form = $state(new MatchData());
 
-	auto: {
-		startingPos: '',
-		fuelFromNZ: 0,
-		climbedInAuto: false,
-		usedOutpost: false,
-		usedDepot: false,
-		autoSOS: 0
-	},
+function cloneForm(data: MatchData) {
+	return structuredClone($state.snapshot(data));
+}
 
-	tele: {
-		shotsMade : 0,
-		fuelPushed : 0,
-		fuelPassed : 0,
+async function readPending() {
+	return (
+		await localforage.getItem<UploadedMatch[]>(PENDING_KEY)
+	) ?? [];
+}
 
-		playedDefense : false,
-		defenseQuality : 0,
-		trenchBump: false,
-		allianceZone : false,
-		neutralZone : false,
+async function writePending(matches: UploadedMatch[]) {
+	await localforage.setItem(PENDING_KEY, matches);
+}
 
-		commitedFouls : false,
-		defendability: 0,
-		shooterRange : 0
-	},
+async function saveForm() {
+	if (!browser) return;
 
-	final: {
-		lostComms : false,
-		brokeDown : false,
-		climbed : false,
-		driverSkill : 0,
-		throughputSpeed : 0,
-		intakeRating : 0,
-		driverComments : "",
-		robotComments : "",
-		otherComments : ""
-	}
-};
-
-
-const form = $state(
-	structuredClone(defaultForm)
-);
-
-export async function deleteSavedMatch(id: string) {
-	if (!browser) return false;
-
-	const saved =
-		await localforage.getItem<SavedMatch[]>('PendingUploads') ?? [];
-
-	const filtered = saved.filter(match => match.id !== id);
-
-	// Nothing was deleted
-	if (filtered.length === saved.length) {
-		return false;
-	}
-
-	await localforage.setItem('PendingUploads', filtered);
-
-	return true;
+	await localforage.setItem(
+		STORAGE_KEY,
+		cloneForm(form)
+	);
 }
 
 async function loadForm() {
 	if (!browser) return;
 
-	const saved = await localforage.getItem<string>(STORAGE_KEY);
+	const saved =
+		await localforage.getItem<Partial<MatchData>>(STORAGE_KEY);
 
 	if (!saved) return;
 
-	try {
-		const data = JSON.parse(saved);
-
-		Object.assign(form.match, data.match ?? {});
-		Object.assign(form.auto, data.auto ?? {});
-		Object.assign(form.tele, data.tele ?? {});
-		Object.assign(form.final, data.final ?? {});
-	} catch {
-		localforage.removeItem(STORAGE_KEY);
-	}
+	Object.assign(form, new MatchData(saved));
 }
 
-
-function saveForm() {
-	if (!browser) return;
-
-	localforage.setItem(
-		STORAGE_KEY,
-		JSON.stringify(form)
-	);
-}
-
-
-$effect.root(() => {
-	$effect(() => {
-		saveForm();
-	});
+$effect(() => {
+	saveForm();
 });
 
-
 loadForm();
-
 
 export function getScoutingForm() {
 	return form;
 }
 
-export interface SavedMatch {
-	id: string;
-	status: 'pending' | 'uploaded' | 'failed';
-	createdAt: number;
-	matchNumber: string;
-	data: typeof defaultForm;
-}
+export async function saveDraftAsFinal() {
+	if (!browser) return null;
 
-export async function saveDraftAsFinal(matchNumber: string) {
-	if (!browser) return;
+	const saved = await readPending();
 
-	const saved =
-		await localforage.getItem<SavedMatch[]>('PendingUploads') ?? [];
-
-	const entry: SavedMatch = {
+	const entry: UploadedMatch = {
 		id: crypto.randomUUID(),
-		status: 'pending',
+		status: "pending",
 		createdAt: Date.now(),
-		matchNumber,
-		data: $state.snapshot(form)
+		matchNumber: form.match.matchNumber,
+		data: cloneForm(form)
 	};
 
-	saved.push(entry);
-
-	await localforage.setItem('PendingUploads', saved);
+	await writePending([
+		...saved,
+		(entry)
+	]);
 
 	return entry.id;
 }
 
+
 export async function getPendingUploads() {
 	if (!browser) return [];
 
-	return (
-		await localforage.getItem<SavedMatch[]>('PendingUploads')
-	) ?? [];
+	return readPending();
 }
 
-export async function updateSavedMatch(
-	id: string,
-	updatedData: typeof defaultForm
-) {
-	if (!browser) return;
-
-	const saved =
-		await localforage.getItem<SavedMatch[]>('PendingUploads') ?? [];
-
-	const index = saved.findIndex(match => match.id === id);
-
-	if (index === -1) return;
-
-	saved[index].data = structuredClone(updatedData);
-	saved[index].matchNumber = updatedData.match.matchNumber;
-
-	await localforage.setItem('PendingUploads', saved);
-}
 
 export async function getSavedMatch(id: string) {
 	if (!browser) return null;
 
-	const saved =
-		await localforage.getItem<SavedMatch[]>('PendingUploads') ?? [];
+	const saved = await readPending();
 
-	return saved.find(match => match.id === id) ?? null;
+	const match = saved.find(
+		match => match.id === id
+	);
+
+	if (!match) return null;
+
+	return {
+		...match,
+		data: new MatchData(match.data)
+	};
 }
 
-export function setScoutingForm(data: typeof defaultForm) {
-	Object.assign(form.match, data.match);
-	Object.assign(form.auto, data.auto);
-	Object.assign(form.tele, data.tele);
-	Object.assign(form.final, data.final);
+
+export async function updateSavedMatch(
+	id: string,
+	data: MatchData
+) {
+	if (!browser) return false;
+
+	const saved = await readPending();
+
+	const index = saved.findIndex(
+		match => match.id === id
+	);
+
+	if (index === -1) {
+		return false;
+	}
+
+	saved[index] = {
+		...saved[index],
+		matchNumber: data.match.matchNumber,
+		data: cloneForm(data)
+	};
+
+	await writePending(saved);
+
+	return true;
 }
+
+
+export async function deleteSavedMatch(id: string) {
+	if (!browser) return false;
+
+	const saved = await readPending();
+
+	const updated = saved.filter(
+		match => match.id !== id
+	);
+
+	if (updated.length === saved.length) {
+		return false;
+	}
+
+	await writePending(updated);
+
+	return true;
+}
+
+export function setScoutingForm(data: MatchData) {
+	Object.assign(form, new MatchData(data));
+}
+
 
 export function clearScoutingForm() {
-	setScoutingForm(defaultForm);
+	Object.assign(form, new MatchData());
 
 	if (browser) {
 		localforage.removeItem(STORAGE_KEY);

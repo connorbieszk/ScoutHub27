@@ -1,0 +1,8 @@
+{
+  "name": "@scouthub27/wrapper",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

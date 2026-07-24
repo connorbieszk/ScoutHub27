@@ -4,10 +4,10 @@
 	import { onMount } from 'svelte';
 	import Button from '$lib/components/forms/Button.svelte';
 	import { getPendingUploads, deleteSavedMatch } from '$lib/stores/match/index.svelte';
-	import type { SavedMatch } from '$lib/stores/match/index.svelte';
+	import type { UploadedMatch } from "@scouthub27/shared";
 	import { slide } from 'svelte/transition';
 
-	let uploadedData = $state<SavedMatch[] | null>(null);
+	let uploadedData = $state<UploadedMatch[] | null>(null);
 
 	async function refreshUploads() {
 		uploadedData = $state.snapshot(await getPendingUploads());
@@ -51,7 +51,8 @@
 	}
 
 	function uploadForm(id: string) {
-		
+		console.log(id);
+		return;
 	}
 
 	function toggleDeleteConfirmation(id: string) {

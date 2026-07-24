@@ -21,15 +21,28 @@
 		localStorage.setItem('Onboarded', 'true');
 		onboarded = true;
 	}
+
+	const DEVICE_KEY = 'deviceId';
+
+	export function getDeviceId() {
+		let id = localStorage.getItem(DEVICE_KEY);
+
+		if (!id) {
+			id = crypto.randomUUID();
+			localStorage.setItem(DEVICE_KEY, id);
+		}
+
+		return id;
+	}
+
+	console.log("Device ID Set: " + getDeviceId())
 </script>
 
 {#if onboarded === null}
 	<div class="content">
 		<div class="title">
 			<h1>HexScouter BioCore</h1>
-			<h2>
-				The site is still loading. Please wait a moment.
-			</h2>
+			<h2>The site is still loading. Please wait a moment.</h2>
 		</div>
 	</div>
 {:else if onboarded}
@@ -39,7 +52,7 @@
 			<h2>
 				Welcome to the 2027 scouting app.<br />
 				Choose where you would like to go.
-				<br> You are using version {version}
+				<br /> You are using version {version}
 			</h2>
 		</div>
 
@@ -54,33 +67,23 @@
 		<div class="title">
 			<h1>HexScouter BioCore</h1>
 			<h2>
-				Welcome Scouter! <br /> 
+				Welcome Scouter! <br />
 				Please select an option to setup your scouting experience!
 			</h2>
 		</div>
 
 		<div class="actions">
-			<Button onclick={() => setTheme(Themes.DARK)}>
-				Dark Theme
-			</Button>
+			<Button onclick={() => setTheme(Themes.DARK)}>Dark Theme</Button>
 
-			<Button onclick={() => setTheme(Themes.HEX_DARK)}>
-				Dark Theme (Hexy)
-			</Button>
+			<Button onclick={() => setTheme(Themes.HEX_DARK)}>Dark Theme (Hexy)</Button>
 
-			<Button onclick={() => setTheme(Themes.LIGHT)}>
-				Light Theme
-			</Button>
+			<Button onclick={() => setTheme(Themes.LIGHT)}>Light Theme</Button>
 
-			<Button onclick={() => setTheme(Themes.HEX_LIGHT)}>
-				Light Theme (Hexy)
-			</Button>
+			<Button onclick={() => setTheme(Themes.HEX_LIGHT)}>Light Theme (Hexy)</Button>
 
 			<br />
 
-			<Button onclick={finishOnboarding}>
-				Continue
-			</Button>
+			<Button onclick={finishOnboarding}>Continue</Button>
 		</div>
 	</div>
 {/if}
@@ -98,7 +101,6 @@
 		align-items: center;
 		padding: 2rem 0;
 	}
-
 
 	.title {
 		display: flex;

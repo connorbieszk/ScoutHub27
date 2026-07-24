@@ -1,4 +1,4 @@
-export const usersList = [
+export const UserList = [
     { label: 'Beau G', value: 'beaug' },
     { label: 'Ben A', value: 'bena' },
     { label: 'Brayden W', value: 'braydenw' },
@@ -25,5 +25,3 @@ export const usersList = [
     { label: 'Tyler P', value: 'tylerp' },
     { label: 'Xavier N', value: 'xaviern' }
 ];
-export const robotsList = [];
-export const scoutingList = [];

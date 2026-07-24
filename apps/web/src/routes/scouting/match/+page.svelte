@@ -8,7 +8,7 @@
 	import Slider from '$lib/components/forms/Slider.svelte';
 	import TextInput from '$lib/components/forms/TextInput.svelte';
 
-	import { usersList } from '$lib/config';
+	import { UserList } from '@scouthub27/shared';
 	import { getScoutingForm, clearScoutingForm, saveDraftAsFinal } from '$lib/stores/match/index.svelte';
 	
 
@@ -50,7 +50,7 @@
 	}
 
 	async function addToOffline() {
-		await saveDraftAsFinal(form.match.matchNumber);
+		await saveDraftAsFinal();
 	}
 
 	onMount(() => {
@@ -91,7 +91,7 @@
 				label="Scouter Name"
 				bind:value={form.match.scouterName}
 				placeholder="Scouter Name"
-				options={usersList}
+				options={UserList}
 			/>
 
 			<br />
