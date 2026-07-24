@@ -39,7 +39,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build SvelteKit frontend
-        run: pnpm --filter @scouthub/web build
+        run: pnpm --filter @scouthub27/web build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
