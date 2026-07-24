@@ -11,6 +11,8 @@ export const sessions = pgTable("sessions", {
     
     devId: uuid("device_id").notNull(),
 
+	memberId: uuid("member_id").notNull(),
+
 	role: memberTypes("role")
 		.notNull(),
 

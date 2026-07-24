@@ -3,40 +3,73 @@ import { deleteMember } from "$lib/server/members";
 import { checkAuth } from "$lib/helpers/checkAuth.js";
 
 
-export async function POST({ locals, params }) {
-    try {
+export async function DELETE({ locals, params }) {
+	try {
+		if (!params.id) {
+			return json(
+				{
+					success: false,
+					error: "Missing member id"
+				},
+				{
+					status: 400
+				}
+			);
+		}
 
-        if (!params.id) {
-            return json(
-                { success: false, error: "Missing member id" },
-                { status: 400 }
-            );
-        }
+		if (!(await checkAuth(locals.session, "users.manage"))) {
+			return json(
+				{
+					success: false,
+					error: "Missing permissions"
+				},
+				{
+					status: 403
+				}
+			);
+		}
 
-        if (!(await checkAuth(locals.session, "users.manage"))) {
-            return json(
-                { success: false, error: "Missing permissions" },
-                { status: 403 }
-            );
-        }
+		if (locals.session?.memberId === params.id) {
+			return json(
+				{
+					success: false,
+					error: "Cannot delete yourself"
+				},
+				{
+					status: 400
+				}
+			);
+		}
 
-        const success = await deleteMember(params.id);
+		const success = await deleteMember(params.id);
 
-        if (!success) {
-            return json(
-                { success: false, error: "Unable to delete user" },
-                { status: 400 }
-            );
-        }
+		if (!success) {
+			return json(
+				{
+					success: false,
+					error: "Unable to delete user"
+				},
+				{
+					status: 404
+				}
+			);
+		}
 
-        return json({
-            success: true
-        });
+		return json({
+			success: true
+		});
 
-    } catch {
-        return json(
-            { success: false, error: "Invalid request" },
-            { status: 500 }
-        );
-    }
+	} catch (error) {
+		console.error(error);
+
+		return json(
+			{
+				success: false,
+				error: "Internal server error"
+			},
+			{
+				status: 500
+			}
+		);
+	}
 }

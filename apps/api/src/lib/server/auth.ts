@@ -7,13 +7,7 @@ import { addDays } from "date-fns";
 import crypto from "crypto";
 import { AuthRoles, type AuthRole} from "@scouthub27/shared";
 
-export interface Session {
-	id: string;
-	devId: string;
-	createdAt: Date;
-	role: AuthRole;
-	expiresAt: Date;
-}
+export type Session = typeof sessions.$inferSelect;
 
 function requireEnv(name: keyof typeof env): string {
 	const value = env[name];
@@ -35,7 +29,8 @@ const passwords: Partial<Record<AuthRole, string>> = {
 export async function authenticateUser(
 	role: AuthRole,
 	password: string,
-	devId: string
+	devId: string,
+	memberId: string
 ): Promise<{ session: Session; token: string } | null> {
 
 	if (!AuthRoles.includes(role)) {
@@ -43,7 +38,7 @@ export async function authenticateUser(
 	}
 
 	if (role === "hexhound") {
-		const token = await createSession(role, devId);
+		const token = await createSession(role, devId, memberId);
 
 		const session = await getSession(token);
 
@@ -73,7 +68,7 @@ export async function authenticateUser(
 		return null;
 	}
 
-	const token = await createSession(role, devId);
+	const token = await createSession(role, devId, memberId);
 
 	const session = await getSession(token);
 
@@ -89,7 +84,8 @@ export async function authenticateUser(
 
 async function createSession(
 	role: AuthRole,
-	devId: string
+	devId: string,
+	memberId: string
 ): Promise<string> {
 
 	const token = crypto.randomBytes(32).toString("hex");
@@ -99,6 +95,7 @@ async function createSession(
 	await db.insert(sessions).values({
 		id: tokenHash,
 		devId,
+		memberId: memberId,
 		role,
 		expiresAt: addDays(
 			new Date(),
@@ -147,6 +144,7 @@ export async function getSession(
 			return {
 				id: session.id,
 				devId: session.devId,
+				memberId: session.memberId,
 				createdAt: session.createdAt,
 				role: session.role as AuthRole,
 				expiresAt: session.expiresAt
