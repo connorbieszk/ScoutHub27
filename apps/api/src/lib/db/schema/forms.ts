@@ -1,5 +1,5 @@
 import { pgTable, uuid, integer, timestamp, text, jsonb } from "drizzle-orm/pg-core";
-import { MatchData } from "@scouthub27/shared";
+import { type MatchData } from "@scouthub27/shared";
 import { formStatus, formType } from "./enums";
 
 

@@ -9,7 +9,7 @@
 	import TextInput from '$lib/components/forms/TextInput.svelte';
 
 	import { UserList } from '@scouthub27/shared';
-	import { getScoutingForm, clearScoutingForm, saveDraftAsFinal } from '$lib/stores/match/index.svelte';
+	import { getScoutingForm, clearScoutingForm, saveDraftAsFinal, setupScoutingForm, loadForm } from '$lib/stores/match/index.svelte';
 	
 
 	const pages = ['Scouter', 'Auto', 'Tele', 'Final', 'Upload'] as const;
@@ -53,6 +53,8 @@
 		await saveDraftAsFinal();
 	}
 
+	setupScoutingForm();
+
 	onMount(() => {
 		const handleOutsideClick = (event: MouseEvent) => {
 			if (!menuElement) return;
@@ -61,6 +63,8 @@
 				menuOpen = false;
 			}
 		};
+
+		loadForm();
 
 		document.addEventListener('click', handleOutsideClick);
 

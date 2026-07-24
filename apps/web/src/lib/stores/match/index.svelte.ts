@@ -1,11 +1,11 @@
 import { browser } from "$app/environment";
 import localforage from "localforage";
-import { MatchData, type UploadedMatch } from "@scouthub27/shared";
+import { type MatchData, createMatchData, UploadedMatch } from "@scouthub27/shared";
 
 const STORAGE_KEY = "matchScoutingFormDraft";
 const PENDING_KEY = "PendingUploads";
 
-const form = $state(new MatchData());
+const form = $state(createMatchData());
 
 function cloneForm(data: MatchData) {
 	return structuredClone($state.snapshot(data));
@@ -30,7 +30,7 @@ async function saveForm() {
 	);
 }
 
-async function loadForm() {
+export async function loadForm() {
 	if (!browser) return;
 
 	const saved =
@@ -38,14 +38,14 @@ async function loadForm() {
 
 	if (!saved) return;
 
-	Object.assign(form, new MatchData(saved));
+	Object.assign(form, createMatchData(saved));
 }
 
-$effect(() => {
-	saveForm();
-});
-
-loadForm();
+export function setupScoutingForm() {
+    $effect(() => {
+        saveForm();
+    });
+}
 
 export function getScoutingForm() {
 	return form;
@@ -93,7 +93,7 @@ export async function getSavedMatch(id: string) {
 
 	return {
 		...match,
-		data: new MatchData(match.data)
+		data: createMatchData(match.data)
 	};
 }
 
@@ -145,12 +145,12 @@ export async function deleteSavedMatch(id: string) {
 }
 
 export function setScoutingForm(data: MatchData) {
-	Object.assign(form, new MatchData(data));
+	Object.assign(form, createMatchData(data));
 }
 
 
 export function clearScoutingForm() {
-	Object.assign(form, new MatchData());
+	Object.assign(form, createMatchData());
 
 	if (browser) {
 		localforage.removeItem(STORAGE_KEY);
