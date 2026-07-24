@@ -34,6 +34,6 @@
 	},
 	"dependencies": {
 		"localforage": "^1.10.0",
-		"@scouthub/shared": "workspace:*"
+		"@scouthub27/shared": "workspace:*"
 	}
 }

@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@sveltejs/adapter-node": "^5.5.4",
+	"@scouthub27/shared": "workspace:*",
     "@sveltejs/kit": "^2.63.0",
     "drizzle-orm": "^0.45.2",
     "postgres": "^3.4.9",
