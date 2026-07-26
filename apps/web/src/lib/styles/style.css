@@ -73,6 +73,9 @@
     --font-bold: 700;
     --font-extrabold: 800;
     --font-black: 900;
+    
+    --tablet-width: 1200px;
+    --phone-width: 900px;
 }
 
 
