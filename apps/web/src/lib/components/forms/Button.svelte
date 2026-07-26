@@ -123,7 +123,7 @@
 		transform: none;
 	}
 
-	@media (max-width: 700px) {
+	@media (max-width: var(--tablet-width) {
 		a,
 		button {
 			font-size: calc(var(--button-font-size) * 0.9);
