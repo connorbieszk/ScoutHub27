@@ -165,7 +165,7 @@
 	}
 
 	/* Mobile adjustments */
-	@media (max-width: 700px) {
+	@media (max-width: var(--tablet-width) {
 		.navbar {
 			gap: 0.5rem;
 		}
