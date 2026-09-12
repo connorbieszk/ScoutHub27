@@ -13,4 +13,5 @@ Currently is setup for the REBUILD 26 FRC Season, for testing/offseason competit
 `pnpm dev` turns on the vite dev preview for both api and webapp
 `pnpm build` builds both api and webapp
 `pnpm api` runs a api command defined in apps/api/package.json
-`pnpm api` runs a web command defined in apps/web/package.json
+
+`pnpm web` runs a web command defined in apps/web/package.json
